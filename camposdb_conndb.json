@@ -1,0 +1,9 @@
+{
+    "CAMPOSDB": {
+        "HOST": "localhost",
+        "DBNAME": "camposdb",
+        "USER": "camposdb",
+        "PASSWORD": "2025",
+        "PORT": "3306"
+    }
+}
