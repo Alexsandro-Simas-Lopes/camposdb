@@ -1,7 +1,7 @@
 <?php
 require_once("../../parametro/configDB/connectDB.php");
 require_once("../../produtos/model/produtos.php");
-
+//and Marca = :Marca and Name = :Name and Img = :Img and Categoria = :Categoria and Sub_Categoria = :Sub_Categoria and Price = :Price
 class produtodao
 {
     public static function getFindById($id): produtos
@@ -9,7 +9,7 @@ class produtodao
         try {
             $param['id'] = $id;
             $PDO = connectDB::getInstance();
-            $sql = "SELECT * FROM produtos WHERE Id = :id and Marca = :Marca and Name = :Name and Img = :Img and Categoria = :Categoria and Sub_Categoria = :Sub_Categoria and Price = :Price";
+            $sql = "SELECT * FROM produtos WHERE Id = :id";
             $stm = $PDO->prepare($sql);
             $stm->execute($param);
             $produto = $stm->fetchObject(produtos::class);
@@ -21,19 +21,16 @@ class produtodao
     }
     public static function getFindByAll(array $input = null)
     {
-        $param_where = '1=1';
         try {
             $PDO = connectDB::getInstance();
-            $sql = "SELECT * FROM produtos WHERE $param_where ORDER BY Id ASC";
+            $sql = "SELECT * FROM produtos ORDER BY Name ASC";
             $stm = $PDO->prepare($sql);
             $stm->execute();
 
-            $results = array();
+            $results = [];
 
             while ($row = $stm->fetch(PDO::FETCH_OBJ)) {
-
                 $objeto = new produtos();
-
                 $objeto->setId($row->Id);
                 $objeto->setMarca($row->Marca);
                 $objeto->setName($row->Name);
@@ -44,6 +41,7 @@ class produtodao
 
                 $results[] = $objeto;
             }
+
             return $results;
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
@@ -54,9 +52,14 @@ class produtodao
     {
         try {
             $PDO = connectDB::getInstance();
-            $sql = "UPDATE produtos set 
-                       Marca = :Marca and Name = :Name and Img = :Img and Categoria = :Categoria and Sub_Categoria = :Sub_Categoria and Price = :Price
-                    WHERE Id = :Id";
+            $sql = "UPDATE produtos SET 
+                    Marca = :Marca, 
+                    Name = :Name, 
+                    Img = :Img, 
+                    Categoria = :Categoria, 
+                    Sub_Categoria = :Sub_Categoria, 
+                    Price = :Price
+                WHERE Id = :Id";
 
             $stm = $PDO->prepare($sql);
             $stm->bindValue(":Id", $produto->getId());
@@ -81,9 +84,9 @@ class produtodao
     {
         try {
             $PDO = connectDB::getInstance();
-            $sql = "INSERT INTO produtos (Id, Marca, Name, Img, Categoria, Price) VALUE (:Id, :Marca, :Name, :Img, :Categoria, :Price)";
+            $sql = "INSERT INTO produtos (Marca, Name, Img, Categoria, Sub_Categoria, Price) 
+                    VALUES (:Marca, :Name, :Img, :Categoria, :Sub_Categoria, :Price)";
             $stm = $PDO->prepare($sql);
-            $stm->bindValue(":Id", strtolower($produto->getId()));
             $stm->bindValue(":Marca", $produto->getMarca());
             $stm->bindValue(":Name", $produto->getName());
             $stm->bindValue(":Img", $produto->getImg());
