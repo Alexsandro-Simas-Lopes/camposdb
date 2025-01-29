@@ -730,17 +730,82 @@ $produto = produtodao::getFindById($dataJSON->id);
 
     function salvar_alteracao_editar() {
         let exec = 0;
-        var descricao_editar = document.getElementById('descricao_editar').value;
+        var marca_editar = document.getElementById('marca_editar').value;
+        var name_editar = document.getElementById('name_editar').value;
+        var img_editar = document.getElementById('img_editar').value;
+        var categoria_editar = document.getElementById('categoria_editar').value;
+        var sub_categoria_editar = document.getElementById('sub_categoria_editar').value;
+        var price_editar = document.getElementById('price_editar').value;
 
-        if (descricao_editar.trim()) {
+        if (marca_editar.trim()) {
             exec++;
         } else {
             expand_dados_gerais_produto_editar()
-            document.getElementById("descricao_editar").style.border = "1px solid red"
-            document.getElementById("descricao_editar_error").style.display = "block"
+            document.getElementById("marca_editar").style.border = "1px solid red"
+            document.getElementById("marca_editar_error").style.display = "block"
             setTimeout(() => {
-                document.getElementById("descricao_editar").style.border = "1px solid #e5e6e7"
-                document.getElementById("descricao_editar_error").style.display = "none"
+                document.getElementById("marca_editar").style.border = "1px solid #e5e6e7"
+                document.getElementById("marca_editar_error").style.display = "none"
+            }, 2300);
+        }
+
+        if (name_editar.trim()) {
+            exec++;
+        } else {
+            expand_dados_gerais_produto_editar()
+            document.getElementById("name_editar").style.border = "1px solid red"
+            document.getElementById("name_editar_error").style.display = "block"
+            setTimeout(() => {
+                document.getElementById("name_editar").style.border = "1px solid #e5e6e7"
+                document.getElementById("name_editar_error").style.display = "none"
+            }, 2300);
+        }
+
+        if (img_editar.trim()) {
+            exec++;
+        } else {
+            expand_dados_gerais_produto_editar()
+            document.getElementById("img_editar").style.border = "1px solid red"
+            document.getElementById("img_editar_error").style.display = "block"
+            setTimeout(() => {
+                document.getElementById("img_editar").style.border = "1px solid #e5e6e7"
+                document.getElementById("img_editar_error").style.display = "none"
+            }, 2300);
+        }
+
+        if (categoria_editar.trim()) {
+            exec++;
+        } else {
+            expand_dados_gerais_produto_editar()
+            document.getElementById("categoria_editar").style.border = "1px solid red"
+            document.getElementById("categoria_editar_error").style.display = "block"
+            setTimeout(() => {
+                document.getElementById("categoria_editar").style.border = "1px solid #e5e6e7"
+                document.getElementById("categoria_editar_error").style.display = "none"
+            }, 2300);
+        }
+
+        if (sub_categoria_editar.trim()) {
+            exec++;
+        } else {
+            expand_dados_gerais_produto_editar()
+            document.getElementById("sub_categoria_editar").style.border = "1px solid red"
+            document.getElementById("sub_categoria_editar_error").style.display = "block"
+            setTimeout(() => {
+                document.getElementById("sub_categoria_editar").style.border = "1px solid #e5e6e7"
+                document.getElementById("sub_categoria_editar_error").style.display = "none"
+            }, 2300);
+        }
+
+        if (price_editar.trim()) {
+            exec++;
+        } else {
+            expand_dados_gerais_produto_editar()
+            document.getElementById("price_editar").style.border = "1px solid red"
+            document.getElementById("price_editar_error").style.display = "block"
+            setTimeout(() => {
+                document.getElementById("price_editar").style.border = "1px solid #e5e6e7"
+                document.getElementById("price_editar_error").style.display = "none"
             }, 2300);
         }
 
@@ -752,7 +817,7 @@ $produto = produtodao::getFindById($dataJSON->id);
             listarproduto();
         }
 
-        if (exec == 2) {
+        if (exec == 7) {
             fetch('../../../produto/produto/control/produto_editar_action.php', {
                     method: 'POST',
                     headers: {
@@ -760,7 +825,12 @@ $produto = produtodao::getFindById($dataJSON->id);
                     },
                     body: JSON.stringify({
                         identificador: document.getElementById("id_produto_editar").value,
-                        descricao: descricao_editar.trim(),
+                        marca: marca_editar.trim(),
+                        name: name_editar.trim(),
+                        img: img_editar.trim(),
+                        categoria: categoria_editar.trim(),
+                        sub_categoria: sub_categoria_editar.trim(),
+                        price: price_editar.trim(),
                     })
                 })
                 .then((response) => response.text())

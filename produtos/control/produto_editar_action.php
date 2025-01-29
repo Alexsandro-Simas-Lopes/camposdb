@@ -1,5 +1,5 @@
 <?php
-require_once("../../../produto/produto/model/produtodao.php");
+require_once("../../produtos/model/produtodao.php");
 
 
 class produto_editar
@@ -11,16 +11,34 @@ class produto_editar
         $receivedData = file_get_contents("php://input");
         $received = json_decode($receivedData, true);
 
-        if (!empty($received['identificador']) && !empty($received['descricao'])) {
-            $verifica_produto = produtodao::getFindById($received['identificador']);
-            if (!empty($verifica_produto->getId())) {
-                $produto = new produto();
+        if (!empty($received['identificador'])) {
+            $produto = produtodao::getFindById($received['identificador'], $received['name'], $received['price'], $received['marca'], $received['categoria'], $received['sub_categoria'], $received['img']);
+            if (!empty($produto->getId())) {
+                
+                $marca_limpo = preg_replace('/[^\x20-\x7E]/', '', $received['marca']);
+                $marca_limpo = str_replace(array("'", '"', '`', '/'), '', $marca_limpo);
 
-                $produto->setId($received['identificador']);
+                $name_limpo = preg_replace('/[^\x20-\x7E]/', '', $received['name']);
+                $name_limpo = str_replace(array("'", '"', '`', '/'), '', $name_limpo);
 
-                $descricao_limpa = preg_replace('/[^\x20-\x7E]/', '', $received['descricao']);
-                $descricao_limpa = str_replace(array("'", '"', '`'), '', $descricao_limpa);
-                $produto->setDescricao($descricao_limpa);
+                $img_limpo = preg_replace('/[^\x20-\x7E]/', '', $received['img']);
+                $img_limpo = str_replace(array("'", '"', '`', '/'), '', $img_limpo);
+
+                $categoria_limpo = preg_replace('/[^\x20-\x7E]/', '', $received['categoria']);
+                $categoria_limpo = str_replace(array("'", '"', '`', '/'), '', $categoria_limpo);
+
+                $sub_categoria_limpo = preg_replace('/[^\x20-\x7E]/', '', $received['sub_categoria']);
+                $sub_categoria_limpo = str_replace(array("'", '"', '`', '/'), '', $sub_categoria_limpo);
+
+                $price_limpo = preg_replace('/[^\x20-\x7E]/', '', $received['price']);
+                $price_limpo = str_replace(array("'", '"', '`', '/'), '', $price_limpo);
+
+                $produto->setMarca($marca_limpo);
+                $produto->setName($name_limpo);
+                $produto->setImg($img_limpo);
+                $produto->setCategoria($categoria_limpo);
+                $produto->setSub_Categoria($sub_categoria_limpo);
+                $produto->setPrice($price_limpo);
 
                 $exec = produtodao::update($produto);
                 if ($exec) {
