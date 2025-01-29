@@ -61,7 +61,6 @@ class produto_listar
                         'categoria' => $op->getCategoria(),
                         'sub_categoria' => $op->getSub_Categoria(),
                         'price' => $op->getPrice(),
-                        'status_label' => $op->getStatusIndicator(),
                     ];
                     $max_limit = max($max_limit, $recid);
                     $sis_all_data[] = $array;

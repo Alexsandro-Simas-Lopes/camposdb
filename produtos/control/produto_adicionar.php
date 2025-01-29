@@ -81,42 +81,31 @@
         <div class="ibox-content" name="content_section1" id="dados_gerais_container">
             <div class="form-group">
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-6">
                         <label for="name">Nome: <span style="color: red;">*</span></label>
                         <input type="text" class="form-control" name="name" id="name" maxlength="100">
                         <label for="name" id="name_error" class="error" style="display: none;">Não pode estar vazia</label>
                     </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
                     <div class="col-lg-6">
                         <label for="price">Preço: <span style="color: red;">*</span></label>
                         <input type="text" class="form-control" name="price" id="price" maxlength="100">
                         <label for="price" id="price_error" class="error" style="display: none;">Não pode estar vazia</label>
                     </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
                     <div class="col-lg-6">
                         <label for="marca">Marca: <span style="color: red;">*</span></label>
                         <input type="text" class="form-control" name="marca" id="marca" maxlength="100">
                         <label for="marca" id="marca_error" class="error" style="display: none;">Não pode estar vazia</label>
                     </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
                     <div class="col-lg-6">
                         <label for="categoria">Categoria: <span style="color: red;">*</span></label>
                         <input type="text" class="form-control" name="categoria" id="categoria" maxlength="100">
                         <label for="categoria" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
                     </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
+                    <div class="col-lg-6">
+                        <label for="sub_categoria">Sub Categoria: <span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" name="sub_categoria" id="sub_categoria" maxlength="100">
+                        <label for="sub_categoria" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
+                    </div>
                     <div class="col-lg-6">
                         <label for="img">Imagem: <span style="color: red;">*</span></label>
                         <input type="text" class="form-control" name="img" id="img" maxlength="100">
@@ -147,6 +136,8 @@
         var price = document.getElementById('price').value;
         var marca = document.getElementById('marca').value;
         var categoria = document.getElementById('categoria').value;
+        var sub_categoria = document.getElementById('sub_categoria').value;
+        var img = document.getElementById('img').value;
 
         if (name.trim()) {
             exec++;
@@ -192,13 +183,37 @@
             }, 2300);
         }
 
-        if (exec === 4) {
+        if (sub_categoria.trim()) {
+            exec++;
+        } else {
+            document.getElementById("sub_categoria").style.border = "1px solid red"
+            document.getElementById("sub_categoria_error").style.display = "block"
+            setTimeout(() => {
+                document.getElementById("sub_categoria").style.border = "1px solid #e5e6e7"
+                document.getElementById("sub_categoria_error").style.display = "none"
+            }, 2300);
+        }
+
+        if (img.trim()) {
+            exec++;
+        } else {
+            document.getElementById("img").style.border = "1px solid red"
+            document.getElementById("img_error").style.display = "block"
+            setTimeout(() => {
+                document.getElementById("img").style.border = "1px solid #e5e6e7"
+                document.getElementById("img_error").style.display = "none"
+            }, 2300);
+        }
+
+        if (exec === 6) {
             insert_data = {};
             let verifica_produto_dados = {
-                name: name,
+                name: name.trim(),
                 price: price,
-                marca: marca,
-                categoria: categoria,
+                marca: marca.trim(),
+                categoria: categoria.trim(),
+                sub_categoria: sub_categoria.trim(),
+                img: img
             };
 
             fetch('../../produtos/control/produto_verifica_existe.php', {
@@ -216,11 +231,22 @@
                     document.getElementById("price").value = ""
                     document.getElementById("marca").value = ""
                     document.getElementById("categoria").value = ""
+                    document.getElementById("sub_categoria").value = ""
                     document.getElementById("img").value = ""
                     mostrar_mensagem_center_modal('Produto já cadastrado')
                     setTimeout(() => {
                         document.getElementById("salvar_produto_action").disabled = false
-                    }, 4);
+                    }, 5);
+                } else if (verifica.trim() == "200") {        
+                    insert_data = {
+                        name: name.trim(),
+                        price: price,
+                        marca: marca.trim(),
+                        categoria: categoria.trim(),
+                        sub_categoria: sub_categoria.trim(),
+                        img: img
+                    };
+                    insert_produto(insert_data);
                 } else {
                     fechar_window()
                     mostrar_mensagem('Houve um erro (Tente novamente)')

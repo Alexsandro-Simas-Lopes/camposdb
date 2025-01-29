@@ -85,12 +85,13 @@ class produtodao
         try {
             $PDO = connectDB::getInstance();
             $sql = "INSERT INTO produtos (Marca, Name, Img, Categoria, Sub_Categoria, Price) 
-                    VALUES (:Marca, :Name, :Img, :Categoria, :Sub_Categoria, :Price)";
+                    VALUES (:Marca, :Name, :Img, :Categoria, :Sub_Categoria,:Price)";
             $stm = $PDO->prepare($sql);
             $stm->bindValue(":Marca", $produto->getMarca());
             $stm->bindValue(":Name", $produto->getName());
             $stm->bindValue(":Img", $produto->getImg());
             $stm->bindValue(":Categoria", $produto->getCategoria());
+            $stm->bindValue(":Sub_Categoria", $produto->getSub_Categoria());
             $stm->bindValue(":Price", $produto->getPrice());
             $stm->execute();
 
