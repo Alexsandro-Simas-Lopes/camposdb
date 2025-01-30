@@ -1,3 +1,7 @@
+<?php 
+    require_once("../../produtos/control/upload.php")
+?>
+
 <style>
     .modal-header-windown {
         border: none !important;
@@ -106,11 +110,15 @@
                         <input type="text" class="form-control" name="sub_categoria" id="sub_categoria" maxlength="100">
                         <label for="sub_categoria" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
                     </div>
-                    <div class="col-lg-6">
-                        <label for="img">Imagem: <span style="color: red;">*</span></label>
-                        <input type="text" class="form-control" name="img" id="img" maxlength="100">
-                        <label for="img" id="img_error" class="error" style="display: none;">Não pode estar vazia</label>
+                    <div class="col-lg-4">
+                        <form id="uploadForm" enctype="multipart/form-data" action="">
+                            <label for="img">Imagem: <span style="color: red;">*</span></label>
+                            <input type="file" name="image" accept="image/*">
+                            <label for="img" id="img_error" class="error" style="display: none;">Não pode estar vazia</label>
+                            <button type="submit">Enviar</button>
+                        </form>
                     </div>
+
                 </div>
             </div>
             <div class="row" style="margin-top: 25px;">
@@ -326,4 +334,27 @@
             document.getElementById("dados_gerais_container").style.display = 'block'
         }
     }
+
+    function salvar_produto(){
+        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch('../../produtos/control/upload.php', { method: 'POST', body: formData });
+            const result = await response.json();
+            alert(result.message || result.error);
+            loadImgProdutos();
+        });
+        
+        async function loadImgProdutos() {
+            const response = await fetch('../../produtos/control/upload.php');
+            const Img_Produtos = await response.json();
+            const container = document.getElementById('Img_Produtos');
+            container.innerHTML = '';
+            Img_Produtos.forEach(product => {
+                container.innerHTML += `<p><img src="${product.imageUrl}" width="150"></p>`;//<strong>${product.name}</strong><br>
+            });
+        }
+        loadImgProdutos();
+    }
+    
 </script>
