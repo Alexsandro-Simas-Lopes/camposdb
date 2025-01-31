@@ -118,13 +118,6 @@
                         <input type="file" class="form-control" name="img" accept="img/*" id="img" maxlength="100">
                         <label for="img" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
                     </div>
-                    <!-- <div class="col-lg-6">
-                        <label for="img">Imagem: <span style="color: red;">*</span></label>
-                        <input type="file" name="img" accept="img/*" id="img">
-                        
-                        <label for="sub_categoria" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
-                        <input type="hidden" name="img" id="img">
-                    </div> -->
                 </div>
             </div>
             <div class="row" style="margin-top: 25px;">
