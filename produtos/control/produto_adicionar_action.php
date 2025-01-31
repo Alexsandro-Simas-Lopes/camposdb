@@ -24,7 +24,7 @@ class produto_adicionar
                 $name_limpo = str_replace(array("'", '"', '`', '/'), '', $name_limpo);
 
                 $img_limpo = preg_replace('/[^\x20-\x7E]/', '', $received['img']);
-                $img_limpo = str_replace(array("'", '"', '`', '/'), '', $img_limpo);
+                $img_limpo = str_replace(array("'", '"', '`'), '', $img_limpo);
 
                 $categoria_limpo = preg_replace('/[^\x20-\x7E]/', '', $received['categoria']);
                 $categoria_limpo = str_replace(array("'", '"', '`', '/'), '', $categoria_limpo);

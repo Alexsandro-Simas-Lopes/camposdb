@@ -1,1 +1,20 @@
-Options -Indexes
+# Permitir o acesso a arquivos na pasta uploads
+RewriteEngine On
+RewriteBase /camposdb/
+
+# Certifica-se de que arquivos estáticos sejam servidos corretamente
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Permitir que imagens sejam carregadas corretamente
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|svg)$">
+    Header set Access-Control-Allow-Origin "*"
+</FilesMatch>
+
+# Evitar problemas de CORS (se necessário)
+Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+Header set Access-Control-Allow-Headers "Content-Type"
+
+# Ativar listagem da pasta (remova se não quiser exibir os arquivos da pasta uploads)
+Options +Indexes
