@@ -51,6 +51,8 @@ class produto_listar
                 $total =  produtodao::getCountPagination($inputs);
                 $operator = produtodao::getFindByAllPagination($inputs);
                 $recid = $start_limit;
+                $sis_all_data = [];
+                
                 foreach ($operator as $op) {
                     $array = [
                         'recid' => $recid++,
@@ -105,3 +107,4 @@ class produto_listar
 }
 
 new produto_listar();
+

@@ -141,6 +141,7 @@ function listarproduto(filtro = {}) {
                 content.data.forEach(item => {
                     const row = document.createElement('tr');
                     if (item.id) {
+                        console.log(item.id);
                         edit = `<i class="fa fa-pencil" data-placement="bottom" style="cursor:pointer; padding: 2px"  title="Alterar" onclick="editar('${item.id}')"></i>`;
                     }
                     if (item.id) {
@@ -157,7 +158,7 @@ function listarproduto(filtro = {}) {
                         <td>${item.price}</td>
                         <td>${item.marca}</td>
                         <td>${item.categoria}</td>
-                        <td>${item.imagem}</td>
+                        <td><img src="${item.img}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: cover;"></td>
                         <!-- <td><center>${item.status_label}</center></td> -->
                         <td><center>${edit}${remover}</center></td>
                     `;

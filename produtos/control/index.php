@@ -10,16 +10,12 @@
     <title>Upload de Imagens</title>
 </head>
 <body>
-    <h2>Cadastro de Produto</h2>
-    <form id="uploadForm" enctype="multipart/form-data">
-        <label>Imagem:</label>
-        <input type="file" name="img" accept="img/*" required>
-        <br>
-        <button type="submit">Enviar</button>
-    </form>
+    
+        <button onclick="loadImgProdutos()" type="button">Enviar</button>
+    
     
     <h2>Produtos Cadastrados</h2>
-    <div id="img_produtos"></div>
+    <div id="produtos"></div>
     
     <script>
         document.getElementById('uploadForm').addEventListener('submit', async function(event) {
@@ -34,7 +30,7 @@
         async function loadImgProdutos() {
             const response = await fetch('upload.php');
             const Img_Produtos = await response.json();
-            const container = document.getElementById('img_produtos');
+            const container = document.getElementById('produtos');
             container.innerHTML = '';
             Img_Produtos.forEach(product => {
                 container.innerHTML += `<p><img src="${product.imgUrl}" width="150"></p>`;
