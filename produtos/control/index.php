@@ -13,7 +13,7 @@
     <h2>Cadastro de Produto</h2>
     <form id="uploadForm" enctype="multipart/form-data">
         <label>Imagem:</label>
-        <input type="file" name="image" accept="image/*" required>
+        <input type="file" name="img" accept="img/*" required>
         <br>
         <button type="submit">Enviar</button>
     </form>
@@ -37,7 +37,7 @@
             const container = document.getElementById('img_produtos');
             container.innerHTML = '';
             Img_Produtos.forEach(product => {
-                container.innerHTML += `<p><img src="${product.imageUrl}" width="150"></p>`;
+                container.innerHTML += `<p><img src="${product.imgUrl}" width="150"></p>`;
             });
         }
 

@@ -1,5 +1,8 @@
 <?php 
     require_once("../../produtos/control/upload.php")
+
+
+    
 ?>
 
 <style>
@@ -110,15 +113,18 @@
                         <input type="text" class="form-control" name="sub_categoria" id="sub_categoria" maxlength="100">
                         <label for="sub_categoria" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
                     </div>
-                    <div class="col-lg-4">
-                        <form id="uploadForm" enctype="multipart/form-data" action="">
-                            <label for="img">Imagem: <span style="color: red;">*</span></label>
-                            <input type="file" name="image" accept="image/*">
-                            <label for="img" id="img_error" class="error" style="display: none;">Não pode estar vazia</label>
-                            <button type="submit">Enviar</button>
-                        </form>
+                    <div class="col-lg-6">
+                        <label for="img">Imagem: <span style="color: red;">*</span></label>
+                        <input type="file" class="form-control" name="img" accept="img/*" id="img" maxlength="100">
+                        <label for="img" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
                     </div>
-
+                    <!-- <div class="col-lg-6">
+                        <label for="img">Imagem: <span style="color: red;">*</span></label>
+                        <input type="file" name="img" accept="img/*" id="img">
+                        
+                        <label for="sub_categoria" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
+                        <input type="hidden" name="img" id="img">
+                    </div> -->
                 </div>
             </div>
             <div class="row" style="margin-top: 25px;">
@@ -139,136 +145,159 @@
 <script>
     function salvar_produto(insert_data = {}) {
         let exec = 0;
-        document.getElementById("salvar_produto_action").disabled = true
+        document.getElementById("salvar_produto_action").disabled = true;
+
         var name = document.getElementById('name').value;
         var price = document.getElementById('price').value;
         var marca = document.getElementById('marca').value;
         var categoria = document.getElementById('categoria').value;
         var sub_categoria = document.getElementById('sub_categoria').value;
-        var img = document.getElementById('img').value;
+        var imgInput = document.getElementById('img');
+        var imgFile = imgInput.files[0]; // Obtém o arquivo selecionado
 
-        if (name.trim()) {
-            exec++;
-        } else {
-            document.getElementById("name").style.border = "1px solid red"
-            document.getElementById("name_error").style.display = "block"
+        if (!imgFile) {
+            document.getElementById("img").style.border = "1px solid red";
+            document.getElementById("img_error").style.display = "block";
             setTimeout(() => {
-                document.getElementById("name").style.border = "1px solid #e5e6e7"
-                document.getElementById("name_error").style.display = "none"
+                document.getElementById("img").style.border = "1px solid #e5e6e7";
+                document.getElementById("img_error").style.display = "none";
             }, 2300);
+            return;
         }
 
-        if (price.trim()) {
-            exec++;
-        } else {
-            document.getElementById("price").style.border = "1px solid red"
-            document.getElementById("price_error").style.display = "block"
-            setTimeout(() => {
-                document.getElementById("price").style.border = "1px solid #e5e6e7"
-                document.getElementById("price_error").style.display = "none"
-            }, 2300);
-        }
+        // Enviar imagem para o servidor
+        const formData = new FormData();
+        formData.append("img", imgFile);
 
-        if (marca.trim()) {
-            exec++;
-        } else {
-            document.getElementById("marca").style.border = "1px solid red"
-            document.getElementById("marca_error").style.display = "block"
-            setTimeout(() => {
-                document.getElementById("marca").style.border = "1px solid #e5e6e7"
-                document.getElementById("marca_error").style.display = "none"
-            }, 2300);
-        }
+        fetch("../../produtos/control/upload.php", {
+            method: "POST",
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.imgUrl) {
+                let imgUrl = data.imgUrl; // URL da imagem salva
 
-        if (categoria.trim()) {
-            exec++;
-        } else {
-            document.getElementById("categoria").style.border = "1px solid red"
-            document.getElementById("categoria_error").style.display = "block"
-            setTimeout(() => {
-                document.getElementById("categoria").style.border = "1px solid #e5e6e7"
-                document.getElementById("categoria_error").style.display = "none"
-            }, 2300);
-        }
-
-        if (sub_categoria.trim()) {
-            exec++;
-        } else {
-            document.getElementById("sub_categoria").style.border = "1px solid red"
-            document.getElementById("sub_categoria_error").style.display = "block"
-            setTimeout(() => {
-                document.getElementById("sub_categoria").style.border = "1px solid #e5e6e7"
-                document.getElementById("sub_categoria_error").style.display = "none"
-            }, 2300);
-        }
-
-        if (img.trim()) {
-            exec++;
-        } else {
-            document.getElementById("img").style.border = "1px solid red"
-            document.getElementById("img_error").style.display = "block"
-            setTimeout(() => {
-                document.getElementById("img").style.border = "1px solid #e5e6e7"
-                document.getElementById("img_error").style.display = "none"
-            }, 2300);
-        }
-
-        if (exec === 6) {
-            insert_data = {};
-            let verifica_produto_dados = {
-                name: name.trim(),
-                price: price,
-                marca: marca.trim(),
-                categoria: categoria.trim(),
-                sub_categoria: sub_categoria.trim(),
-                img: img
-            };
-
-            fetch('../../produtos/control/produto_verifica_existe.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(verifica_produto_dados),
-            })
-            .then((response) => response.text())
-            .then((verifica) => {
-                if (verifica.trim() == "400") {
-                    expand_dados_gerais_produto()
-                    document.getElementById("name").value = ""
-                    document.getElementById("price").value = ""
-                    document.getElementById("marca").value = ""
-                    document.getElementById("categoria").value = ""
-                    document.getElementById("sub_categoria").value = ""
-                    document.getElementById("img").value = ""
-                    mostrar_mensagem_center_modal('Produto já cadastrado')
+                // Validação dos campos
+                if (name.trim()) {
+                    exec++;
+                } else {
+                    document.getElementById("name").style.border = "1px solid red";
+                    document.getElementById("name_error").style.display = "block";
                     setTimeout(() => {
-                        document.getElementById("salvar_produto_action").disabled = false
-                    }, 5);
-                } else if (verifica.trim() == "200") {        
-                    insert_data = {
+                        document.getElementById("name").style.border = "1px solid #e5e6e7";
+                        document.getElementById("name_error").style.display = "none";
+                    }, 2300);
+                }
+
+                if (price.trim()) {
+                    exec++;
+                } else {
+                    document.getElementById("price").style.border = "1px solid red";
+                    document.getElementById("price_error").style.display = "block";
+                    setTimeout(() => {
+                        document.getElementById("price").style.border = "1px solid #e5e6e7";
+                        document.getElementById("price_error").style.display = "none";
+                    }, 2300);
+                }
+
+                if (marca.trim()) {
+                    exec++;
+                } else {
+                    document.getElementById("marca").style.border = "1px solid red";
+                    document.getElementById("marca_error").style.display = "block";
+                    setTimeout(() => {
+                        document.getElementById("marca").style.border = "1px solid #e5e6e7";
+                        document.getElementById("marca_error").style.display = "none";
+                    }, 2300);
+                }
+
+                if (categoria.trim()) {
+                    exec++;
+                } else {
+                    document.getElementById("categoria").style.border = "1px solid red";
+                    document.getElementById("categoria_error").style.display = "block";
+                    setTimeout(() => {
+                        document.getElementById("categoria").style.border = "1px solid #e5e6e7";
+                        document.getElementById("categoria_error").style.display = "none";
+                    }, 2300);
+                }
+
+                if (sub_categoria.trim()) {
+                    exec++;
+                } else {
+                    document.getElementById("sub_categoria").style.border = "1px solid red";
+                    document.getElementById("sub_categoria_error").style.display = "block";
+                    setTimeout(() => {
+                        document.getElementById("sub_categoria").style.border = "1px solid #e5e6e7";
+                        document.getElementById("sub_categoria_error").style.display = "none";
+                    }, 2300);
+                }
+
+                if (exec === 5) {
+                    let verifica_produto_dados = {
                         name: name.trim(),
                         price: price,
                         marca: marca.trim(),
                         categoria: categoria.trim(),
                         sub_categoria: sub_categoria.trim(),
-                        img: img
+                        img: imgUrl // Usa a URL da imagem salva
                     };
-                    insert_produto(insert_data);
-                } else {
-                    fechar_window()
-                    mostrar_mensagem('Houve um erro (Tente novamente)')
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
 
-        } else {
-            expand_dados_gerais_produto()
-            document.getElementById("salvar_produto_action").disabled = false
-        }
+                    fetch('../../produtos/control/produto_verifica_existe.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(verifica_produto_dados),
+                    })
+                    .then((response) => response.text())
+                    .then((verifica) => {
+                        if (verifica.trim() == "400") {
+                            expand_dados_gerais_produto();
+                            document.getElementById("name").value = "";
+                            document.getElementById("price").value = "";
+                            document.getElementById("marca").value = "";
+                            document.getElementById("categoria").value = "";
+                            document.getElementById("sub_categoria").value = "";
+                            document.getElementById("img").value = "";
+                            mostrar_mensagem_center_modal('Produto já cadastrado');
+                            setTimeout(() => {
+                                document.getElementById("salvar_produto_action").disabled = false;
+                            }, 5);
+                        } else if (verifica.trim() == "200") {
+                            insert_data = {
+                                name: name.trim(),
+                                price: price,
+                                marca: marca.trim(),
+                                categoria: categoria.trim(),
+                                sub_categoria: sub_categoria.trim(),
+                                img: imgUrl // Usa a URL correta da imagem
+                            };
+                            insert_produto(insert_data);
+                        } else {
+                            fechar_window();
+                            mostrar_mensagem('Houve um erro (Tente novamente)');
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+                } else {
+                    expand_dados_gerais_produto();
+                    document.getElementById("salvar_produto_action").disabled = false;
+                }
+            } else {
+                console.error("Erro no upload da imagem:", data.error);
+                document.getElementById("salvar_produto_action").disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error("Erro ao enviar a imagem:", error);
+            document.getElementById("salvar_produto_action").disabled = false;
+        });
     }
+
 
     function insert_produto(content = {}) {
         setTimeout(() => {
@@ -311,50 +340,27 @@
         }
     }
 
-    function fechar_modal() {
-        $('#modal').modal('hide');
-        if ($('#modal_window').hasClass('in')) {
-            setTimeout(() => {
-                $('body').addClass('modal-open').css('padding-right', '14px');
-            }, 15);
-        } else {
-            $('body').css('padding-right', '0').removeClass('modal-open');
-        }
-    }
+    // function fechar_modal() {
+    //     $('#modal').modal('hide');
+    //     if ($('#modal_window').hasClass('in')) {
+    //         setTimeout(() => {
+    //             $('body').addClass('modal-open').css('padding-right', '14px');
+    //         }, 15);
+    //     } else {
+    //         $('body').css('padding-right', '0').removeClass('modal-open');
+    //     }
+    // }
 
-    function expand_dados_gerais_produto() {
-        let verifica_expand_dados_gerais = document.getElementById("expand_section1")
-        let verifica_expand_identificacao = document.getElementById("expand_section2")
-        let verifica_expand_parametro = document.getElementById("expand_section3")
+    // function expand_dados_gerais_produto() {
+    //     let verifica_expand_dados_gerais = document.getElementById("expand_section1")
+    //     let verifica_expand_identificacao = document.getElementById("expand_section2")
+    //     let verifica_expand_parametro = document.getElementById("expand_section3")
 
-        if (verifica_expand_dados_gerais.className.includes('fa-chevron-down')) {
-            verifica_expand_dados_gerais.classList.remove('fa-chevron-down')
-            verifica_expand_dados_gerais.classList.remove('fa-chevron-up')
-            verifica_expand_dados_gerais.classList.add('fa-chevron-up')
-            document.getElementById("dados_gerais_container").style.display = 'block'
-        }
-    }
-
-    function salvar_produto(){
-        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const formData = new FormData(this);
-            const response = await fetch('../../produtos/control/upload.php', { method: 'POST', body: formData });
-            const result = await response.json();
-            alert(result.message || result.error);
-            loadImgProdutos();
-        });
-        
-        async function loadImgProdutos() {
-            const response = await fetch('../../produtos/control/upload.php');
-            const Img_Produtos = await response.json();
-            const container = document.getElementById('Img_Produtos');
-            container.innerHTML = '';
-            Img_Produtos.forEach(product => {
-                container.innerHTML += `<p><img src="${product.imageUrl}" width="150"></p>`;//<strong>${product.name}</strong><br>
-            });
-        }
-        loadImgProdutos();
-    }
-    
+    //     if (verifica_expand_dados_gerais.className.includes('fa-chevron-down')) {
+    //         verifica_expand_dados_gerais.classList.remove('fa-chevron-down')
+    //         verifica_expand_dados_gerais.classList.remove('fa-chevron-up')
+    //         verifica_expand_dados_gerais.classList.add('fa-chevron-up')
+    //         document.getElementById("dados_gerais_container").style.display = 'block'
+    //     }
+    // }
 </script>
