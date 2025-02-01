@@ -12,7 +12,7 @@ class produto_editar
         $received = json_decode($receivedData, true);
 
         if (!empty($received['identificador'])) {
-            $produto = produtodao::getFindById($received['identificador'], $received['name'], $received['price'], $received['marca'], $received['categoria'], $received['sub_categoria'], $received['img']);
+            $produto = produtodao::getFindById($received['identificador'], $received['name'], $received['price'], $received['marca'], $received['categoria'], $received['sub_categoria']);
             if (!empty($produto->getId())) {
                 
                 $marca_limpo = preg_replace('/[^\x20-\x7E]/', '', $received['marca']);
@@ -20,9 +20,6 @@ class produto_editar
 
                 $name_limpo = preg_replace('/[^\x20-\x7E]/', '', $received['name']);
                 $name_limpo = str_replace(array("'", '"', '`', '/'), '', $name_limpo);
-
-                $img_limpo = preg_replace('/[^\x20-\x7E]/', '', $received['img']);
-                $img_limpo = str_replace(array("'", '"', '`', '/'), '', $img_limpo);
 
                 $categoria_limpo = preg_replace('/[^\x20-\x7E]/', '', $received['categoria']);
                 $categoria_limpo = str_replace(array("'", '"', '`', '/'), '', $categoria_limpo);
@@ -35,7 +32,6 @@ class produto_editar
 
                 $produto->setMarca($marca_limpo);
                 $produto->setName($name_limpo);
-                $produto->setImg($img_limpo);
                 $produto->setCategoria($categoria_limpo);
                 $produto->setSub_Categoria($sub_categoria_limpo);
                 $produto->setPrice($price_limpo);

@@ -89,6 +89,24 @@ function editar(id) {
         });
 }
 
+function editarImg(id) {
+    fetch('../../produtos/control/produto_editar_img.php', {
+        method: 'POST',
+        body: JSON.stringify({
+            id: id
+        })
+    })
+        .then((response) => response.text())
+        .then((html) => {
+            $('#modal_window').find('.modal-content').html('');
+            $('#modal_window').find('.modal-content').html(html);
+            $('#modal_window').modal('show');
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+}
+
 function fechar() {
     $('#modal').modal('hide');
     $('#modal').find('.modal-content').html('');
@@ -142,10 +160,14 @@ function listarproduto(filtro = {}) {
                     const row = document.createElement('tr');
                     if (item.id) {
                         console.log(item.id);
-                        edit = `<i class="fa fa-pencil" data-placement="bottom" style="cursor:pointer; padding: 2px"  title="Alterar" onclick="editar('${item.id}')"></i>`;
+                        edit = `<button class="btn btn-primary dim" type="button"><i class="fa fa-pencil" data-placement="bottom" style="cursor:pointer; padding: 2px"  title="Alterar" onclick="editar('${item.id}')"></i></button>`;
                     }
                     if (item.id) {
-                        remover = `<i class="fa fa-trash" data-placement="bottom" style="cursor:pointer; padding: 2px"  title="Excluir" onclick="excluir('${item.id}','${item.name ?? ""}')"></i>`;
+                        console.log(item.id);
+                        editImg = `<button class="btn btn-warning dim" type="button"><i class="fa fa-camera" data-placement="bottom" style="cursor:pointer; padding: 2px"  title="Alterar" onclick="editarImg('${item.id}')"></i></button>`;
+                    }
+                    if (item.id) {
+                        remover = `<button class="btn btn-danger dim" type="button"><i class="fa fa-trash" data-placement="bottom" style="cursor:pointer; padding: 2px"  title="Excluir" onclick="excluir('${item.id}','${item.name ?? ""}')"></i></button>`;
                     }
                     row.innerHTML = `
                         <!-- <td>
@@ -158,9 +180,9 @@ function listarproduto(filtro = {}) {
                         <td>${item.price}</td>
                         <td>${item.marca}</td>
                         <td>${item.categoria}</td>
+                        <td>${item.sub_categoria}</td>
                         <td><img src="${item.img}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: cover;"></td>
-                        <!-- <td><center>${item.status_label}</center></td> -->
-                        <td><center>${edit}${remover}</center></td>
+                        <td><center>${editImg}${edit}${remover}</center></td>
                     `;
                     row.setAttribute('recid', item.recid);
                     row.classList.add("tr-produto-" + item.id)

@@ -64,7 +64,7 @@
 </style>
 <div class="modal-header modal-header-windown">
     <div style="display: flex; justify-content: space-between;">
-        <h4 class="modal-title" style="font-weight: 600; font-size: 25px; color: black; margin-left: 15px;">Alterar produto</h4>
+        <h4 class="modal-title" style="font-weight: 600; font-size: 25px; color: black; margin-left: 15px;">Alterar dados do produto</h4>
         <div style="display: flex; align-items: center; gap: 25px;">
             <div style="display:flex; margin-top: 5px; gap: 15px;">
                 <a name="#section1" onclick="verify_expand(this.name)">
@@ -132,15 +132,6 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <label for="img_editar">Imagem: <span style="color: red;">*</span></label>
-                        <input type="text" class="form-control" name="img_editar" id="img_editar" value="<?= $produto->getImg(); ?>" maxlength="150">
-                        <label for="img_editar" id="img_editar_error" class="error" style="display: none;">Não pode estar vazia</label>
-                    </div>
-                </div>
-            </div>
             <div class="row" style="margin-top: 25px;">
                 <div class="col-lg-12">
                     <span style="color: red;"><strong>*</strong> Campos obrigatórios </span>
@@ -161,7 +152,6 @@
         let exec = 0;
         var marca_editar = document.getElementById('marca_editar').value;
         var name_editar = document.getElementById('name_editar').value;
-        var img_editar = document.getElementById('img_editar').value;
         var categoria_editar = document.getElementById('categoria_editar').value;
         var sub_categoria_editar = document.getElementById('sub_categoria_editar').value;
         var price_editar = document.getElementById('price_editar').value;
@@ -187,18 +177,6 @@
             setTimeout(() => {
                 document.getElementById("name_editar").style.border = "1px solid #e5e6e7"
                 document.getElementById("name_editar_error").style.display = "none"
-            }, 2300);
-        }
-
-        if (img_editar.trim()) {
-            exec++;
-        } else {
-            expand_dados_gerais_produto_editar()
-            document.getElementById("img_editar").style.border = "1px solid red"
-            document.getElementById("img_editar_error").style.display = "block"
-            setTimeout(() => {
-                document.getElementById("img_editar").style.border = "1px solid #e5e6e7"
-                document.getElementById("img_editar_error").style.display = "none"
             }, 2300);
         }
 
@@ -246,7 +224,7 @@
             listarproduto();
         }
 
-        if (exec == 7) {
+        if (exec == 6) {
             fetch('../../produtos/control/produto_editar_action.php', {
                 method: 'POST',
                 headers: {
@@ -256,7 +234,6 @@
                     identificador: document.getElementById("id_produto_editar").value,
                     marca: marca_editar.trim(),
                     name: name_editar.trim(),
-                    img: img_editar.trim(),
                     categoria: categoria_editar.trim(),
                     sub_categoria: sub_categoria_editar.trim(),
                     price: price_editar.trim(),
