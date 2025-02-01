@@ -161,13 +161,19 @@
                                                         <i class="bi bi-arrow-down-up" id="categoria_ordericon" target="default" order="categoria" name="orders_table"></i>
                                                     </div>
                                                 </th>
-                                                <th data-i18n="" style="cursor: pointer;" onclick="set_order_table_produto('img')">
+                                                <th data-i18n="" style="cursor: pointer;" onclick="set_order_table_produto('sub_categoria')">
+                                                    <div class="th_separator">
+                                                        <span>Sub Categoria</span>
+                                                        <i class="bi bi-arrow-down-up" id="sub_categoria_ordericon" target="default" order="sub_categoria" name="orders_table"></i>
+                                                    </div>
+                                                </th>
+                                                <th data-i18n="" style="cursor: pointer; width: 5%;" onclick="set_order_table_produto('img')">
                                                     <div class="th_separator">
                                                         <span>Imagem</span>
                                                         <i class="bi bi-arrow-down-up" id="img_ordericon" target="default" order="img" name="orders_table"></i>
                                                     </div>
                                                 </th>
-                                                <th data-i18n="">
+                                                <th data-i18n="" style="cursor: pointer; width: 13%;">
                                                     <center>Ações</center>
                                                 </th>
                                             </tr>
@@ -219,7 +225,7 @@
                 </div>
             </div>
         </div>
-
+        
         <div class="modal" id="modal_window" role="dialog" data-backdrop="static" data-keyboard="false" style="overflow-y: hidden !important;">
             <div class="modal-dialog modal-lg modal-to-window">
                 <div class="modal-content modal-to-window-content modal-content animated bounceInUp">...</div>

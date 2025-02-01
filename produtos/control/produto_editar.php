@@ -64,7 +64,7 @@
 </style>
 <div class="modal-header modal-header-windown">
     <div style="display: flex; justify-content: space-between;">
-        <h4 class="modal-title" style="font-weight: 600; font-size: 25px; color: black; margin-left: 15px;">Alterar produto</h4>
+        <h4 class="modal-title" style="font-weight: 600; font-size: 25px; color: black; margin-left: 15px;">Alterar dados do produto</h4>
         <div style="display: flex; align-items: center; gap: 25px;">
             <div style="display:flex; margin-top: 5px; gap: 15px;">
                 <a name="#section1" onclick="verify_expand(this.name)">
@@ -132,15 +132,6 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <label for="img_editar">Imagem: <span style="color: red;">*</span></label>
-                        <input type="file" class="form-control" name="img_editar" accept="img_editar/*" id="img_editar" value="<?= $produto->getImg(); ?>" maxlength="150">
-                        <label for="img_editar" id="img_editar_error" class="error" style="display: none;">Não pode estar vazia</label>
-                    </div>
-                </div>
-            </div>
             <div class="row" style="margin-top: 25px;">
                 <div class="col-lg-12">
                     <span style="color: red;"><strong>*</strong> Campos obrigatórios </span>
@@ -157,176 +148,106 @@
 </div>
 
 <script>
-    
     function salvar_alteracao_editar() {
         let exec = 0;
-        document.getElementById("editar_produto_action").disabled = true;
+        var marca_editar = document.getElementById('marca_editar').value;
+        var name_editar = document.getElementById('name_editar').value;
+        var categoria_editar = document.getElementById('categoria_editar').value;
+        var sub_categoria_editar = document.getElementById('sub_categoria_editar').value;
+        var price_editar = document.getElementById('price_editar').value;
 
-        var name = document.getElementById('name_editar').value;
-        var price = document.getElementById('price_editar').value;
-        var marca = document.getElementById('marca_editar').value;
-        var categoria = document.getElementById('categoria_editar').value;
-        var sub_categoria = document.getElementById('sub_categoria_editar').value;
-        var imgInput = document.getElementById('img_editar');
-        var imgFile = imgInput.files[0]; // Obtém o arquivo selecionado (se houver)
-
-        // Se houver uma nova imagem, faz o upload
-        let imgUrl = "";
-        if (imgFile) {
-            const formData = new FormData();
-            formData.append("img", imgFile);
-
-            fetch("../../produtos/control/upload.php", {
-                method: "POST",
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.imgUrl) {
-                    imgUrl = data.imgUrl; // URL da imagem salva
-                    console.log("Imagem URL Nova", imgUrl);
-                } else {
-                    console.error("Erro no upload da imagem:", data.error);
-                    document.getElementById("editar_produto_action").disabled = false;
-                    return;
-                }
-            })
-            .catch(error => {
-                console.error("Erro ao enviar a imagem:", error);
-                document.getElementById("editar_produto_action").disabled = false;
-                return;
-            });
-        } else {
-            // Se não houver uma nova imagem, utiliza a imagem atual (imgUrl precisa ser passada no update_data)
-            imgUrl = update_data.img || ""; 
-            console.log("Imagem URL Atual", imgUrl);
-        }
-
-        // Validação dos campos
-        if (name.trim()) {
+        if (marca_editar.trim()) {
             exec++;
         } else {
-            document.getElementById("name_editar").style.border = "1px solid red";
-            document.getElementById("name_editar_error").style.display = "block";
+            expand_dados_gerais_produto_editar()
+            document.getElementById("marca_editar").style.border = "1px solid red"
+            document.getElementById("marca_editar_error").style.display = "block"
             setTimeout(() => {
-                document.getElementById("name_editar").style.border = "1px solid #e5e6e7";
-                document.getElementById("name_editar_error").style.display = "none";
+                document.getElementById("marca_editar").style.border = "1px solid #e5e6e7"
+                document.getElementById("marca_editar_error").style.display = "none"
             }, 2300);
         }
 
-        if (price.trim()) {
+        if (name_editar.trim()) {
             exec++;
         } else {
-            document.getElementById("price_editar").style.border = "1px solid red";
-            document.getElementById("price_editar_error").style.display = "block";
+            expand_dados_gerais_produto_editar()
+            document.getElementById("name_editar").style.border = "1px solid red"
+            document.getElementById("name_editar_error").style.display = "block"
             setTimeout(() => {
-                document.getElementById("price_editar").style.border = "1px solid #e5e6e7";
-                document.getElementById("price_editar_error").style.display = "none";
+                document.getElementById("name_editar").style.border = "1px solid #e5e6e7"
+                document.getElementById("name_editar_error").style.display = "none"
             }, 2300);
         }
 
-        if (marca.trim()) {
+        if (categoria_editar.trim()) {
             exec++;
         } else {
-            document.getElementById("marca_editar").style.border = "1px solid red";
-            document.getElementById("marca_editar_error").style.display = "block";
+            expand_dados_gerais_produto_editar()
+            document.getElementById("categoria_editar").style.border = "1px solid red"
+            document.getElementById("categoria_editar_error").style.display = "block"
             setTimeout(() => {
-                document.getElementById("marca_editar").style.border = "1px solid #e5e6e7";
-                document.getElementById("marca_editar_error").style.display = "none";
+                document.getElementById("categoria_editar").style.border = "1px solid #e5e6e7"
+                document.getElementById("categoria_editar_error").style.display = "none"
             }, 2300);
         }
 
-        if (categoria.trim()) {
+        if (sub_categoria_editar.trim()) {
             exec++;
         } else {
-            document.getElementById("categoria_editar").style.border = "1px solid red";
-            document.getElementById("categoria_editar_error").style.display = "block";
+            expand_dados_gerais_produto_editar()
+            document.getElementById("sub_categoria_editar").style.border = "1px solid red"
+            document.getElementById("sub_categoria_editar_error").style.display = "block"
             setTimeout(() => {
-                document.getElementById("categoria_editar").style.border = "1px solid #e5e6e7";
-                document.getElementById("categoria_editar_error").style.display = "none";
+                document.getElementById("sub_categoria_editar").style.border = "1px solid #e5e6e7"
+                document.getElementById("sub_categoria_editar_error").style.display = "none"
             }, 2300);
         }
 
-        if (sub_categoria.trim()) {
+        if (price_editar.trim()) {
             exec++;
         } else {
-            document.getElementById("sub_categoria_editar").style.border = "1px solid red";
-            document.getElementById("sub_categoria_editar_error").style.display = "block";
+            expand_dados_gerais_produto_editar()
+            document.getElementById("price_editar").style.border = "1px solid red"
+            document.getElementById("price_editar_error").style.display = "block"
             setTimeout(() => {
-                document.getElementById("sub_categoria_editar").style.border = "1px solid #e5e6e7";
-                document.getElementById("sub_categoria_editar_error").style.display = "none";
+                document.getElementById("price_editar").style.border = "1px solid #e5e6e7"
+                document.getElementById("price_editar_error").style.display = "none"
             }, 2300);
         }
 
-        if (exec === 5) {
-            let verifica_produto_dados = {
-                name: name.trim(),
-                price: price,
-                marca: marca.trim(),
-                categoria: categoria.trim(),
-                sub_categoria: sub_categoria.trim(),
-                img: imgUrl // URL da imagem (nova ou mantida)
-            };
+        if (document.getElementById("id_produto_editar").value) {
+            exec++;
+        } else {
+            fechar_window();
+            mostrar_mensagem('Houve um erro (Tente novamente)')
+            listarproduto();
+        }
 
-            // Verifica se o produto já existe
-            fetch('../../produtos/control/produto_verifica_existe.php', {
+        if (exec == 6) {
+            fetch('../../produtos/control/produto_editar_action.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(verifica_produto_dados),
+                body: JSON.stringify({
+                    identificador: document.getElementById("id_produto_editar").value,
+                    marca: marca_editar.trim(),
+                    name: name_editar.trim(),
+                    categoria: categoria_editar.trim(),
+                    sub_categoria: sub_categoria_editar.trim(),
+                    price: price_editar.trim(),
+                })
             })
             .then((response) => response.text())
-            .then((verifica) => {
-                if (verifica.trim() == "400") {
-                    mostrar_mensagem_center_modal('Produto já cadastrado');
-                    document.getElementById("editar_produto_action").disabled = false;
-                } else if (verifica.trim() == "200") {
-                    // Se o produto não existir, realiza a edição no banco
-                    update_data = {
-                        id: update_data.id, // ID do produto que será editado
-                        name: name.trim(),
-                        price: price,
-                        marca: marca.trim(),
-                        categoria: categoria.trim(),
-                        sub_categoria: sub_categoria.trim(),
-                        img: imgUrl // Usa a URL correta da imagem (nova ou mantida)
-                    };
-                    editar_produto_no_banco(update_data); // Função para editar no banco
-                } else {
-                    fechar_window();
-                    mostrar_mensagem('Houve um erro (Tente novamente)');
-                    document.getElementById("editar_produto_action").disabled = false;
-                }
+            .then((data) => {
+                fechar_window();
+                listarproduto();
             })
             .catch((error) => {
                 console.error(error);
-                document.getElementById("editar_produto_action").disabled = false;
             });
-        } else {
-            document.getElementById("editar_produto_action").disabled = false;
         }
-    }
-
-    function editar_produto_no_banco(update_data) {
-        // Função que envia a atualização do produto para o banco de dados
-        fetch('../../produtos/control/produto_editar_action.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(update_data),
-        })
-        .then((response) => response.text())
-        .then((data) => {
-            console.log(data);
-            fechar_window();
-            listarproduto();
-        })
-        .catch((error) => {
-            console.error(error);
-            mostrar_mensagem('Houve um erro ao editar o produto');
-        });
     }
    
     function expand_dados_gerais_produto_editar() {
@@ -442,7 +363,6 @@
         let exec = 0;
         var marca_editar = document.getElementById('marca_editar').value;
         var name_editar = document.getElementById('name_editar').value;
-        var img_editar = document.getElementById('img_editar').value;
         var categoria_editar = document.getElementById('categoria_editar').value;
         var sub_categoria_editar = document.getElementById('sub_categoria_editar').value;
         var price_editar = document.getElementById('price_editar').value;
@@ -468,18 +388,6 @@
             setTimeout(() => {
                 document.getElementById("name_editar").style.border = "1px solid #e5e6e7"
                 document.getElementById("name_editar_error").style.display = "none"
-            }, 2300);
-        }
-
-        if (img_editar.trim()) {
-            exec++;
-        } else {
-            expand_dados_gerais_produto_editar()
-            document.getElementById("img_editar").style.border = "1px solid red"
-            document.getElementById("img_editar_error").style.display = "block"
-            setTimeout(() => {
-                document.getElementById("img_editar").style.border = "1px solid #e5e6e7"
-                document.getElementById("img_editar_error").style.display = "none"
             }, 2300);
         }
 
@@ -527,7 +435,7 @@
             listarproduto();
         }
 
-        if (exec == 7) {
+        if (exec == 6) {
             fetch('../../produtos/control/produto_editar_action.php', {
                 method: 'POST',
                 headers: {
@@ -537,7 +445,6 @@
                     identificador: document.getElementById("id_produto_editar").value,
                     marca: marca_editar.trim(),
                     name: name_editar.trim(),
-                    img: img_editar.trim(),
                     categoria: categoria_editar.trim(),
                     sub_categoria: sub_categoria_editar.trim(),
                     price: price_editar.trim(),

@@ -11,9 +11,7 @@ class produto_editar
         $received = json_decode($receivedData, true);
 
         if (!empty($received['identificador'])) {
-            // Buscar produto pelo ID
-            $produto = produtodao::getFindById($received['identificador'], $received['name'], $received['price'], $received['marca'], $received['categoria'], $received['sub_categoria'], $received['img']);
-            
+            $produto = produtodao::getFindById($received['identificador'], $received['name'], $received['price'], $received['marca'], $received['categoria'], $received['sub_categoria']);
             if (!empty($produto->getId())) {
                 // Limpeza dos dados recebidos
                 $marca_limpo = preg_replace('/[^\x20-\x7E]/', '', $received['marca']);
@@ -38,7 +36,6 @@ class produto_editar
                 // Atualiza os dados do produto
                 $produto->setMarca($marca_limpo);
                 $produto->setName($name_limpo);
-                $produto->setImg($novaImagem);
                 $produto->setCategoria($categoria_limpo);
                 $produto->setSub_Categoria($sub_categoria_limpo);
                 $produto->setPrice($price_limpo);
