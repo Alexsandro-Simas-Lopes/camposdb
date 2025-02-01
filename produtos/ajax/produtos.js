@@ -160,14 +160,14 @@ function listarproduto(filtro = {}) {
                     const row = document.createElement('tr');
                     if (item.id) {
                         console.log(item.id);
-                        edit = `<button class="btn btn-primary dim" type="button"><i class="fa fa-pencil" data-placement="bottom" style="cursor:pointer; padding: 2px"  title="Alterar" onclick="editar('${item.id}')"></i></button>`;
+                        edit = `<button onclick="editar('${item.id}')" class="btn btn-primary dim" type="button"><i class="fa fa-pencil" data-placement="bottom" style="cursor:pointer; padding: 2px"  title="Alterar"></i></button>`;
                     }
                     if (item.id) {
                         console.log(item.id);
-                        editImg = `<button class="btn btn-warning dim" type="button"><i class="fa fa-camera" data-placement="bottom" style="cursor:pointer; padding: 2px"  title="Alterar" onclick="editarImg('${item.id}')"></i></button>`;
+                        editImg = `<button onclick="editarImg('${item.id}')" class="btn btn-warning dim" type="button"><i class="fa fa-camera" data-placement="bottom" style="cursor:pointer; padding: 2px"  title="Alterar"></i></button>`;
                     }
                     if (item.id) {
-                        remover = `<button class="btn btn-danger dim" type="button"><i class="fa fa-trash" data-placement="bottom" style="cursor:pointer; padding: 2px"  title="Excluir" onclick="excluir('${item.id}','${item.name ?? ""}')"></i></button>`;
+                        remover = `<button onclick="excluir('${item.id}','${item.name ?? ""}')" class="btn btn-danger dim" type="button"><i class="fa fa-trash" data-placement="bottom" style="cursor:pointer; padding: 2px"  title="Excluir"></i></button>`;
                     }
                     row.innerHTML = `
                         <!-- <td>
