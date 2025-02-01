@@ -64,7 +64,7 @@
 </style>
 <div class="modal-header modal-header-windown">
     <div style="display: flex; justify-content: space-between;">
-        <h4 class="modal-title" style="font-weight: 600; font-size: 25px; color: black; margin-left: 15px;">Alterar imagem</h4>
+        <h4 class="modal-title" style="font-weight: 600; font-size: 25px; color: black; margin-left: 15px;">Adicionar imagem</h4>
         <div style="display: flex; align-items: center; gap: 25px;">
             <div style="display:flex; margin-top: 5px; gap: 15px;">
                 <a name="#section1" onclick="verify_expand(this.name)">
@@ -89,10 +89,10 @@
         <div class="ibox-content" name="content_section1" id="dados_gerais_container">
             <div class="form-group">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <label for="img_editar">Imagem: <span style="color: red;">*</span></label>
-                        <input type="file" class="form-control" name="img_editar" id="img_editar" value="<?= $produto->getImg(); ?>">
-                        <label for="img_editar" id="img_editar_error" class="error" style="display: none;">Não pode estar vazia</label>
+                    <div class="col-lg-6">
+                        <label for="img">Imagem: <span style="color: red;">*</span></label>
+                        <input type="file" class="form-control" name="img" accept="img/*" id="img">
+                        <label for="img" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
                     </div>
                 </div>
             </div>
@@ -107,62 +107,88 @@
 <div class="modal-footer modal-footer-windown">
     <div class="separte_buttons">
         <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
-        <button class="btn btn-primary" id="editar_produto_action" onclick="salvar_alteracao_editarImg()">Salvar Alteração</button>
+        <button class="btn btn-primary" id="editar_produto_action" onclick="salvar_produto_img()">Salvar Imagem</button>
     </div>
 </div>
 
 <script>
-    function salvar_alteracao_editarImg() {
+    function salvar_produto_img() {
         let exec = 0;
-        var img_editar = document.getElementById('img_editar').value;
-       
-        if (img_editar.trim()) {
-            exec++;
-        } else {
-            expand_dados_gerais_produto_editar()
-            document.getElementById("img_editar").style.border = "1px solid red"
-            document.getElementById("img_editar_error").style.display = "block"
+        document.getElementById("salvar_produto_action").disabled = true;
+
+        var imgInput = document.getElementById('img');
+        var imgFile = imgInput.files[0]; // Obtém o arquivo selecionado
+        var idProduto = document.getElementById('id_produto_editar').value; // Obtém o ID do produto
+
+        if (!imgFile) {
+            document.getElementById("img").style.border = "1px solid red";
+            document.getElementById("img_error").style.display = "block";
             setTimeout(() => {
-                document.getElementById("img_editar").style.border = "1px solid #e5e6e7"
-                document.getElementById("img_editar_error").style.display = "none"
+                document.getElementById("img").style.border = "1px solid #e5e6e7";
+                document.getElementById("img_error").style.display = "none";
             }, 2300);
+            document.getElementById("salvar_produto_action").disabled = false;
+            return;
         }
 
-        if (document.getElementById("id_produto_editar").value) {
-            exec++;
-        } else {
-            fechar_window();
-            mostrar_mensagem('Houve um erro (Tente novamente)')
-            listarproduto();
-        }
+        // Enviar imagem para o servidor
+        const formData = new FormData();
+        formData.append("img", imgFile);
+        formData.append("id", idProduto); // Envia o ID do produto para o backend
 
-        if (exec == 2) {
-            fetch('../../produtos/control/produto_editar_action.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    identificador: document.getElementById("id_produto_editar").value,
-                    img: img_editar,
+        fetch('../../produtos/control/upload.php', { // Endpoint correto
+            method: "POST",
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.imgUrl) {
+                let imgUrl = data.imgUrl; // URL da imagem salva
+
+                let dadosProduto = {
+                    id: idProduto, // Passa o ID do produto
+                    img: imgUrl // Usa a URL da imagem salva
+                };
+
+                // Agora, envie a URL da imagem para o banco de dados
+                fetch('../../produtos/control/produto_atualizar_img.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dadosProduto),
                 })
-            })
-            .then((response) => response.text())
-            .then((data) => {
-                fechar_window();
-                listarproduto();
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-        }
+                .then(response => response.text())
+                .then(verifica => {
+                    if (verifica.trim() === "200") {
+                        mostrar_mensagem("Imagem atualizada com sucesso!");
+                        setTimeout(() => {
+                            document.getElementById("salvar_produto_action").disabled = false;
+                        }, 5);
+                    } else {
+                        mostrar_mensagem("Houve um erro ao atualizar a imagem.");
+                        document.getElementById("salvar_produto_action").disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao atualizar a imagem:", error);
+                    document.getElementById("salvar_produto_action").disabled = false;
+                });
+
+            } else {
+                console.error("Erro no upload da imagem:", data.error);
+                document.getElementById("salvar_produto_action").disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error("Erro ao enviar a imagem:", error);
+            document.getElementById("salvar_produto_action").disabled = false;
+        });
     }
+
    
     function expand_dados_gerais_produto_editar() {
         let verifica_expand_dados_gerais = document.getElementById("expand_section1")
-        let verifica_expand_identificacao = document.getElementById("expand_section2")
-        let verifica_expand_parametro = document.getElementById("expand_section3")
-
         if (verifica_expand_dados_gerais.className.includes('fa-chevron-down')) {
             verifica_expand_dados_gerais.classList.remove('fa-chevron-down')
             verifica_expand_dados_gerais.classList.remove('fa-chevron-up')
@@ -171,91 +197,3 @@
         }
     }
 </script>
-<!-- function salvar_alteracao_editar() {
-        let exec = 0;
-        document.getElementById("editar_produto_action").disabled = true;
-        var imgInput = document.getElementById('img_editar');
-        var imgFile = imgInput.files[0]; // Obtém o arquivo selecionado (se houver)
-
-        // Se houver uma nova imagem, faz o upload
-        let imgUrl = "";
-        if (imgFile) {
-            const formData = new FormData();
-            formData.append("img", imgFile);
-
-            fetch("../../produtos/control/upload.php", {
-                method: "POST",
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.imgUrl) {
-                    imgUrl = data.imgUrl; // URL da imagem salva
-                    console.log("Imagem URL Nova", imgUrl);
-                } else {
-                    console.error("Erro no upload da imagem:", data.error);
-                    document.getElementById("editar_produto_action").disabled = false;
-                    return;
-                }
-            })
-            .catch(error => {
-                console.error("Erro ao enviar a imagem:", error);
-                document.getElementById("editar_produto_action").disabled = false;
-                return;
-            });
-        } else {
-            // Se não houver uma nova imagem, utiliza a imagem atual (imgUrl precisa ser passada no update_data)
-            imgUrl = update_data.img || ""; 
-            console.log("Imagem URL Atual", imgUrl);
-        }
-
-        if (img_editar.trim()) {
-            exec++;
-        } else {
-            document.getElementById("img_editar").style.border = "1px solid red";
-            document.getElementById("img_editar_error").style.display = "block";
-            setTimeout(() => {
-                document.getElementById("img_editar").style.border = "1px solid #e5e6e7";
-                document.getElementById("img_editar_error").style.display = "none";
-            }, 2300);
-        }
-
-        if (exec === 1) {
-            let verifica_produto_dados = {
-                img: imgUrl // URL da imagem (nova ou mantida)
-            };
-
-            // Verifica se o produto já existe
-            fetch('../../produtos/control/produto_verifica_existe.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(verifica_produto_dados),
-            })
-            .then((response) => response.text())
-            .then((verifica) => {
-                if (verifica.trim() == "400") {
-                    mostrar_mensagem_center_modal('Produto já cadastrado');
-                    document.getElementById("editar_produto_action").disabled = false;
-                } else if (verifica.trim() == "200") {
-                    // Se o produto não existir, realiza a edição no banco
-                    update_data = {
-                        id: update_data.id, // ID do produto que será editado
-                        img: imgUrl // Usa a URL correta da imagem (nova ou mantida)
-                    };
-                    editar_produto_no_banco(update_data); // Função para editar no banco
-                } else {
-                    fechar_window();
-                    mostrar_mensagem('Houve um erro (Tente novamente)');
-                    document.getElementById("editar_produto_action").disabled = false;
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-                document.getElementById("editar_produto_action").disabled = false;
-            });
-        } else {
-            document.getElementById("editar_produto_action").disabled = false;
-        }
-    } -->

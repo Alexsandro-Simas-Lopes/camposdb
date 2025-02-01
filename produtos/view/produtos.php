@@ -131,7 +131,7 @@
                                     <table class="table table-striped table-bordered table-hover dataTables-example" id="table_produto" page='1'>
                                         <thead>
                                             <tr>
-                                                <th data-i18n="" style="cursor: pointer;" onclick="set_order_table_produto('id')">
+                                                <th data-i18n="" style="cursor: pointer; width: 2vw;" onclick="set_order_table_produto('id')">
                                                     <div class="th_separator">
                                                         <span>ID</span>
                                                         <i class="bi bi-arrow-down-up" id="id_ordericon" target="default" order="id" name="orders_table"></i>
@@ -167,13 +167,13 @@
                                                         <i class="bi bi-arrow-down-up" id="sub_categoria_ordericon" target="default" order="sub_categoria" name="orders_table"></i>
                                                     </div>
                                                 </th>
-                                                <th data-i18n="" style="cursor: pointer; width: 5%;" onclick="set_order_table_produto('img')">
+                                                <th data-i18n="" style="cursor: pointer; width: 7vw;" onclick="set_order_table_produto('img')">
                                                     <div class="th_separator">
                                                         <span>Imagem</span>
                                                         <i class="bi bi-arrow-down-up" id="img_ordericon" target="default" order="img" name="orders_table"></i>
                                                     </div>
                                                 </th>
-                                                <th data-i18n="" style="cursor: pointer; width: 13%;">
+                                                <th data-i18n="" style="cursor: pointer; width: 15vw;">
                                                     <center>Ações</center>
                                                 </th>
                                             </tr>
