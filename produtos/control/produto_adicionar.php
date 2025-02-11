@@ -1,10 +1,3 @@
-<?php 
-    require_once("../../produtos/control/upload.php")
-
-
-    
-?>
-
 <style>
     .modal-header-windown {
         border: none !important;
@@ -261,48 +254,8 @@
                         marca: marca.trim(),
                         categoria: categoria.trim(),
                         sub_categoria: sub_categoria.trim(),
-                        img: imgUrl // Usa a URL da imagem salva
                     };
-
-                    fetch('../../produtos/control/produto_verifica_existe.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(verifica_produto_dados),
-                    })
-                    .then((response) => response.text())
-                    .then((verifica) => {
-                        if (verifica.trim() == "400") {
-                            expand_dados_gerais_produto();
-                            document.getElementById("name").value = "";
-                            document.getElementById("price").value = "";
-                            document.getElementById("marca").value = "";
-                            document.getElementById("categoria").value = "";
-                            document.getElementById("sub_categoria").value = "";
-                            document.getElementById("img").value = "";
-                            mostrar_mensagem_center_modal('Produto já cadastrado');
-                            setTimeout(() => {
-                                document.getElementById("salvar_produto_action").disabled = false;
-                            }, 5);
-                        } else if (verifica.trim() == "200") {
-                            insert_data = {
-                                name: name.trim(),
-                                price: price,
-                                marca: marca.trim(),
-                                categoria: categoria.trim(),
-                                sub_categoria: sub_categoria.trim(),
-                                img: imgUrl // Usa a URL correta da imagem
-                            };
-                            insert_produto(insert_data);
-                        } else {
-                            fechar_window();
-                            mostrar_mensagem('Houve um erro (Tente novamente)');
-                        }
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
+                    insert_produto(insert_data);
                 } else {
                     console.error("Erro no upload da imagem:", data.error);
                     document.getElementById("salvar_produto_action").disabled = false;
