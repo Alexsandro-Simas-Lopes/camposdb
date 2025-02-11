@@ -1,7 +1,6 @@
 <?php
 require_once("../../produtos/model/produtodao.php");
 
-
 class produto_editar
 {
     public function __construct()
@@ -14,7 +13,7 @@ class produto_editar
         if (!empty($received['identificador'])) {
             $produto = produtodao::getFindById($received['identificador'], $received['name'], $received['price'], $received['marca'], $received['categoria'], $received['sub_categoria']);
             if (!empty($produto->getId())) {
-                
+                // Limpeza dos dados recebidos
                 $marca_limpo = preg_replace('/[^\x20-\x7E]/', '', $received['marca']);
                 $marca_limpo = str_replace(array("'", '"', '`', '/'), '', $marca_limpo);
 
@@ -30,6 +29,11 @@ class produto_editar
                 $price_limpo = preg_replace('/[^\x20-\x7E]/', '', $received['price']);
                 $price_limpo = str_replace(array("'", '"', '`', '/'), '', $price_limpo);
 
+                // Atualizar imagem se um novo arquivo foi enviado
+                $imagemAntiga = $produto->getImg();
+                $novaImagem = isset($_FILES['img']) ? uploadImagem($_FILES['img'], $imagemAntiga) : $imagemAntiga;
+
+                // Atualiza os dados do produto
                 $produto->setMarca($marca_limpo);
                 $produto->setName($name_limpo);
                 $produto->setCategoria($categoria_limpo);
@@ -40,6 +44,7 @@ class produto_editar
                 if ($exec) {
                     echo $success_code;
                 }
+                
             } else {
                 echo $error_code;
             }
@@ -48,4 +53,6 @@ class produto_editar
         }
     }
 }
+
 new produto_editar();
+

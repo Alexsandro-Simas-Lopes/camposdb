@@ -54,8 +54,7 @@ class produtodao
             $PDO = connectDB::getInstance();
             $sql = "UPDATE produtos SET 
                     Marca = :Marca, 
-                    Name = :Name, 
-                    Img = :Img, 
+                    Name = :Name,
                     Categoria = :Categoria, 
                     Sub_Categoria = :Sub_Categoria, 
                     Price = :Price
@@ -65,7 +64,6 @@ class produtodao
             $stm->bindValue(":Id", $produto->getId());
             $stm->bindValue(":Marca", $produto->getMarca());
             $stm->bindValue(":Name", $produto->getName());
-            $stm->bindValue(":Img", $produto->getImg());
             $stm->bindValue(":Categoria", $produto->getCategoria());
             $stm->bindValue(":Sub_Categoria", $produto->getSub_Categoria());
             $stm->bindValue(":Price", $produto->getPrice());
@@ -80,6 +78,25 @@ class produtodao
             throw new Exception($e->getMessage());
         }
     }
+
+    public static function updateProdutoImg($id, $imgUrl)
+    {
+        try {
+            $PDO = connectDB::getInstance();
+            $sql = "UPDATE produtos SET Img = :Img WHERE Id = :Id";
+
+            $stm = $PDO->prepare($sql);
+            $stm->bindValue(":Id", $id);
+            $stm->bindValue(":Img", $imgUrl);
+            $stm->execute();
+
+            return $stm->rowCount() > 0;
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+
     public static function insert(produtos $produto)
     {
         try {
