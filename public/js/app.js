@@ -68,16 +68,14 @@ loja.eventos = {
     }
 }
 
+const urls = [
+    'http://localhost/camposdb/public/api/getProdutos.php'// https://www.produtoscampos.com.br/js/dados.js
+    //'/public/js/dados.js' // https://produtoscampos.com.br/js/dados.js
+];
 
 loja.metodos = {
 
     obterItensLojaInicio: async () => {
-        
-        const urls = [
-            'http://127.0.0.1:5500/public/js/dados.js'// https://www.produtoscampos.com.br/js/dados.js
-            //'/public/js/dados.js' // https://produtoscampos.com.br/js/dados.js
-        ];
-        let MENU = null;
     
         for (const url of urls) {
             try {
@@ -87,7 +85,7 @@ loja.metodos = {
                 console.warn(`Erro ao carregar JSON de ${url}:`, error);
             }
         }
-    
+        
         if (MENU) {
             loja.itemExibidosNoMenu = MENU;
             loja.metodos.obterItensLoja();
@@ -147,23 +145,23 @@ loja.metodos = {
         var categorias = []
         switch (value) {
             case 1:
-                categorias = ['ACESSÓRIO PARA PÁSSAROS', 'ALIMENTO PARA PÁSSAROS', 'SUPLEMENTO PARA PÁSSAROS'];
+                categorias = ['ACESSORIO PARA PASSAROS', 'ALIMENTO PARA PASSAROS', 'SUPLEMENTO PARA PASSAROS'];
               break;
 
             case 2:
-                categorias =['PETISCOS PARA CÃES', 'ACESSÓRIO PARA CÃES'];
+                categorias =['PETISCOS PARA CAES', 'ACESSORIO PARA CAES'];
               break;
 
             case 3:
-                categorias = ['HIGIENE PARA GATOS', 'ACESSÓRIO PARA GATOS'];
+                categorias = ['HIGIENE PARA GATOS', 'ACESSORIO PARA GATOS'];
             break;
 
             case 4:
-                categorias = ['ACESSÓRIO PARA PÁSSAROS', 'ACESSÓRIO PARA GATOS', 'ACESSÓRIO PARA CÃES', 'ACESSÓRIO PARA ROEDORES'];
+                categorias = ['ACESSORIO PARA PASSAROS', 'ACESSORIO PARA GATOS', 'ACESSORIO PARA CAES', 'ACESSORIO PARA ROEDORES'];
             break;
 
             case 5:
-                categorias = ['HIGIENE PARA ROEDORES', 'HIGIENE PARA GATOS', 'ACESSÓRIO PARA ROEDORES', 'ALIMENTO PARA ROEDORES', 'PETISCOS PARA ROEDORES'];
+                categorias = ['HIGIENE PARA ROEDORES', 'HIGIENE PARA GATOS', 'ACESSORIO PARA ROEDORES', 'ALIMENTO PARA ROEDORES', 'PETISCOS PARA ROEDORES'];
             break;
 
             default:
@@ -306,34 +304,34 @@ loja.templates = {
     
         item: `
         <div class="col-12 mb-5">
-                        <div class="card h-100">
-                            <!-- Product image-->
+            <div class="card h-100">
+                <!-- Product image-->
 
-                            <div class="card-cont">
-                            <img class="card-img-top" src="\${img}" alt="..." />
-                            </div>
+                <div class="card-cont">
+                <img class="card-img-top" src="\${img}" alt="..." />
+                </div>
 
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder">\${name}</h5>
-                                    <!-- Product price-->
- 
-                                    <span class="price">
-                                        <span class="currency">R$</span>
-                                        <span class="value">\${price-show}</span>
-                                    </span>
-                                   
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center">
-                                <a class="custom-button mt-auto" href="item.php" "onclick="loja.metodos.verPaginaDoItem(['\${img}','\${name}','\${id}','\${price}','\${marca}'])"
-                                >Comprar</a></div>
-                            </div>
-                        </div>
+                <!-- Product details-->
+                <div class="card-body p-4">
+                    <div class="text-center">
+                        <!-- Product name-->
+                        <h5 class="fw-bolder">\${name}</h5>
+                        <!-- Product price-->
+
+                        <span class="price">
+                            <span class="currency">R$</span>
+                            <span class="value">\${price-show}</span>
+                        </span>
+                        
+                    </div>
+                </div>
+                <!-- Product actions-->
+                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                    <div class="text-center">
+                    <a class="custom-button mt-auto" href="item.php" onclick="loja.metodos.verPaginaDoItem(['\${img}','\${name}','\${id}','\${price}','\${marca}'])"
+                    >Comprar</a></div>
+                </div>
+            </div>
         </div>
     `,
 
@@ -548,7 +546,7 @@ document.querySelector(".dropdown-btn").addEventListener("click", function() {
     console.log("Categorias selecionadas:", categoriasSelecionadas);
 
     var itensFiltrados = filtrarBaseDeDados(categoriasSelecionadas); // Filtra a base de dados com base nas subcategorias selecionadas
-    console.log("itens filtrados", itensFiltrados); 
+    console.log("itens filtrados", itensFiltrados);
     
     if(itensFiltrados.length == 0){
         loja.metodos.feedBackBuscaFalha();

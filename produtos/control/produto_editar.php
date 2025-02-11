@@ -117,12 +117,26 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-lg-12">
-                        <label for="categoria_editar">categoria: <span style="color: red;">*</span></label>
-                        <input type="text" class="form-control" name="categoria_editar" id="categoria_editar" value="<?= $produto->getCategoria(); ?>" maxlength="50">
+                        <label for="categoria_editar">Categoria: <span style="color: red;">*</span></label>
+                            <select class="form-control m-b" name="categoria_editar" id="categoria_editar" maxlength="50">
+                                <option aria-disabled="true"  value="<?= $produto->getCategoria(); ?>"> <?= $produto->getCategoria(); ?> </option>
+                                <option value="ACESSORIO PARA PASSAROS">ACESSORIO PARA PASSAROS</option>
+                                <option value="ACESSORIO PARA ROEDORES">ACESSORIO PARA ROEDORES</option>
+                                <option value="ACESSORIO PARA GATOS">ACESSORIO PARA GATOS</option>
+                                <option value="ACESSORIO PARA CAES">ACESSORIO PARA CAES</option>
+                                <option value="ALIMENTO PARA PASSAROS">ALIMENTO PARA PASSAROS</option>
+                                <option value="ALIMENTO PARA ROEDORES">ALIMENTO PARA ROEDORES</option>
+                                <option value="SUPLEMENTO PARA PASSAROS">SUPLEMENTO PARA PASSAROS</option>
+                                <option value="PETISCOS PARA CAES">PETISCOS PARA CAES</option>
+                                <option value="PETISCOS PARA ROEDORES">PETISCOS PARA ROEDORES</option>
+                                <option value="HIGIENE PARA GATOS">HIGIENE PARA GATOS</option>
+                                <option value="HIGIENE PARA ROEDORES">HIGIENE PARA ROEDORES</option>
+                            </select>
                         <label for="categoria_editar" id="categoria_editar_error" class="error" style="display: none;">Não pode estar vazia</label>
                     </div>
                 </div>
             </div>
+            
             <div class="form-group">
                 <div class="row">
                     <div class="col-lg-12">

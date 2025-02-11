@@ -182,7 +182,7 @@ function listarproduto(filtro = {}) {
                         <td>${item.categoria}</td>
                         <td>${item.sub_categoria}</td>
                         <td><img src="${item.img}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: cover;"></td>
-                        <td><center>${editImg}${edit}${remover}</center></td>
+                        <td><center>${edit}${remover}</center></td>
                     `;
                     row.setAttribute('recid', item.recid);
                     row.classList.add("tr-produto-" + item.id)

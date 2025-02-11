@@ -124,10 +124,10 @@
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
-        <script type="text/javascript" src="js/jquery-3.7.1.js"></script>
-        <script type="text/javascript" src="js/dados.js"></script>
-        <script type="text/javascript" src="js/carrinho.js"></script>
-        <script type="text/javascript" src="js/item.js?v=2.3"></script>
+        <script type="text/javascript" src="http://localhost/camposdb/public/js/jquery-3.7.1.js"></script>
+        <script type="text/javascript" src="http://localhost/camposdb/public/js/dados.js"></script>
+        <script type="text/javascript" src="http://localhost/camposdb/public/js/carrinho.js"></script>
+        <script type="text/javascript" src="http://localhost/camposdb/public/js/item.js"></script>
 
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5RXN6MPS"

@@ -95,36 +95,36 @@
         <!-- test section items section-->
 
         <!-- test section items section-->
-    <section class="py-5 bg-light">
-        <div class="container px-4 px-lg-5 mt-5">
-          <div class="d-flex justify-content-between align-items-center">
-            <h2 class="fw-bolder mb-4">Produtos no Carrinho</h2>
-            <h2 id="total-carrinho" class="fw-bolder mb-4">Total : </h2>
-          </div>
-          <div id="div-de-alerta">
-            <div class="card mb-4">
-              <h3 class="fw-bolder mb-4" style="margin: auto; padding: 8px; font-weight: normal;">Seu carrinho ainda está vazio</h3>
-              <img class="card-img-top" src="assets/assets_img/carrinho_vazio.png" style="margin: auto;" alt="..." />
+        <section class="py-5 bg-light">
+            <div class="container px-4 px-lg-5 mt-5">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="fw-bolder mb-4">Produtos no Carrinho</h2>
+                <h2 id="total-carrinho" class="fw-bolder mb-4">Total : </h2>
             </div>
-          </div>
-          <div id="itensProdutosCarrinho" class="col mr-0 ml-0 animated fadeIn hidden">
-            <!-- Lista -->
-          </div>
-          <div class="container-button-cart">
-            <a class="btn btn-outline-dark flex-shrink-1 mb-3"  type="button"
-              onclick="loja.metodos.voltarParaAnterior()">
-              <i class="bi bi-arrow-90deg-left"></i>
-              Continuar Comprando
-            </a>
-                    
-            <a id="btn-finalizar-compra" class="btn btn-outline-dark flex-shrink-1 mb-3"  type="button" href="fazerPedido.php"
-              onclick="loja.metodos.obterValorTotal()">
-              Finalizar Compra
-              <i class="bi bi-arrow-right"></i>
-            </a>
-          </div>
-        </div>
-      </section>
+            <div id="div-de-alerta">
+                <div class="card mb-4">
+                <h3 class="fw-bolder mb-4" style="margin: auto; padding: 8px; font-weight: normal;">Seu carrinho ainda está vazio</h3>
+                <img class="card-img-top" src="assets/assets_img/carrinho_vazio.png" style="margin: auto;" alt="..." />
+                </div>
+            </div>
+            <div id="itensProdutosCarrinho" class="col mr-0 ml-0 animated fadeIn hidden">
+                <!-- Lista -->
+            </div>
+            <div class="container-button-cart">
+                <a class="btn btn-outline-dark flex-shrink-1 mb-3"  type="button"
+                onclick="loja.metodos.voltarParaAnterior()">
+                <i class="bi bi-arrow-90deg-left"></i>
+                Continuar Comprando
+                </a>
+                        
+                <a id="btn-finalizar-compra" class="btn btn-outline-dark flex-shrink-1 mb-3"  type="button" href="fazerPedido.php"
+                onclick="loja.metodos.obterValorTotal()">
+                Finalizar Compra
+                <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+            </div>
+        </section>
 
         <!-- Footer-->
         <footer class="py-5 bg-dark">
@@ -133,14 +133,14 @@
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
-        <script type="text/javascript" src="js/jquery-3.7.1.js"></script>
-        <script type="text/javascript" src="js/carrinho.js"></script>
-        <script type="text/javascript" src="js/processoCompra.js?v=2.3"></script>
+        <script type="text/javascript" src="http://localhost/camposdb/public/js/jquery-3.7.1.js"></script>
+        <script type="text/javascript" src="http://localhost/camposdb/public/js/carrinho.js"></script>
+        <script type="text/javascript" src="http://localhost/camposdb/public/js/processoCompra.js"></script>
 
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5RXN6MPS"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5RXN6MPS"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
 
     </body>
 </html>

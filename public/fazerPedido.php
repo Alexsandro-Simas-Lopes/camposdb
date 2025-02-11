@@ -77,7 +77,7 @@
                                 </span>
                             </a>
                             <!-- Botão Carrinho -->
-                            <form style="display: flex !important;" action="carrinho.html">
+                            <form style="display: flex !important;" action="carrinho.php">
                             <button type="submit" class="btn position-relative custom-button m-2">
                                 <span class="d-none d-lg-inline">Carrinho</span> <!-- Oculta o texto em dispositivos móveis -->
                                 <i class="bi-cart-fill me-1"></i>
@@ -186,9 +186,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
-        <script type="text/javascript" src="js/jquery-3.7.1.js"></script>
-        <script type="text/javascript" src="js/carrinho.js"></script>
-        <script type="text/javascript" src="js/fazerPedido.js"></script>
+        <script type="text/javascript" src="http://localhost/camposdb/public/js/jquery-3.7.1.js"></script>
+        <script type="text/javascript" src="http://localhost/camposdb/public/js/carrinho.js"></script>
+        <script type="text/javascript" src="http://localhost/camposdb/public/js/fazerPedido.js"></script>
         
 
     </body>

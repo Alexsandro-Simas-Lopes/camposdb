@@ -16,17 +16,13 @@ loja.eventos = {
     }
 }
 
+const urls = [
+    "http://localhost/camposdb/public/api/getProdutos.php"
+    //'/public/js/dados.js' // https://produtoscampos.com.br/js/dados.js
+];
+
+
 loja.metodos = {
-    
-    voltarParaAnterior: () => {
-        if (window.history.length > 1) {
-            // Voltar para a página anterior
-            window.history.back();
-        } else {
-            // Caso não haja página anterior, redirecionar para a rota principal ou outra página
-            window.location.href = '/';
-        }
-    },
 
     obterItemSelecionado:() =>{
         let string = sessionStorage.getItem('item_data')
@@ -100,46 +96,62 @@ loja.metodos = {
         }
     },
 
-    getProximosElementos:(index) =>{
-        if (index < 0 || index >= MENU.length) {
-            return null; // Retorna null se o índice estiver fora do intervalo do array
-        }
+    getProximosElementos: (index) => {
+        getMENU((MENU) => {
+            if (index < 0 || index >= MENU.length) {
+                console.warn("Índice fora do intervalo:", index);
+                return null;
+            }
     
-        let proximosElementos;
-        if (index + 4 > MENU.length) {
-            // Se o índice estiver próximo do final do array, retorna os 4 elementos anteriores
-            proximosElementos = MENU.slice(Math.max(0, index - 4), index);
-        } else {
-            // Retorna os 4 próximos elementos
-            proximosElementos = MENU.slice(index + 1, index + 5);
-        }
-        
-        loja.metodos.obterItensRelacionado(proximosElementos);
-    },
-
-    adicionarAoCarrinho:(value) =>{
-
-        let quantityLabel = document.getElementById('inputQuantity');
-        quantidade = parseInt(quantityLabel.textContent);
-
-        id = (parseInt(value)) - 1
-        var itemParaAdicionar = MENU[id];
-        carrinhoDeCompras.adicionarItem({
-        img: itemParaAdicionar.img,
-        id: itemParaAdicionar.id,
-        name: itemParaAdicionar.name,
-        preco: itemParaAdicionar.price,
-        quantidade: quantidade,
-        total: quantidade
+            let proximosElementos;
+            if (index + 4 > MENU.length) {
+                // Se o índice estiver próximo do final do array, retorna os 4 elementos anteriores
+                proximosElementos = MENU.slice(Math.max(0, index - 4), index);
+            } else {
+                // Retorna os 4 próximos elementos
+                proximosElementos = MENU.slice(index + 1, index + 5);
+            }
+    
+            console.log("Elementos relacionados encontrados:", proximosElementos);
+            loja.metodos.obterItensRelacionado(proximosElementos);
         });
-
-        carrinhoDeCompras.salvarCarrinho();
-        carrinhoDeCompras.carregarCarrinho();
-        loja.metodos.atualizarBadge(carrinhoDeCompras.calcularTotalQuantidade());
-
-        loja.metodos.mensagem('Item adicionado ao carrinho', 'green');
-
     },
+
+    adicionarAoCarrinho: (value) => {
+        getMENU((MENU) => {
+            let quantityLabel = document.getElementById('inputQuantity');
+            let quantidade = parseInt(quantityLabel.textContent) || 1; // Garante que seja um número válido
+    
+            // 🛠️ Busca o produto pelo ID correto dentro do MENU
+            let itemParaAdicionar = MENU.find(item => item.id == value);
+    
+            if (!itemParaAdicionar) {
+                console.error("Produto não encontrado no MENU para o ID:", value);
+                loja.metodos.mensagem("Erro ao adicionar item ao carrinho!", "red");
+                return;
+            }
+    
+            console.log("Adicionando ao carrinho:", itemParaAdicionar);
+    
+            carrinhoDeCompras.adicionarItem({
+                img: itemParaAdicionar.img,
+                id: itemParaAdicionar.id,
+                name: itemParaAdicionar.name,
+                preco: itemParaAdicionar.price,
+                quantidade: quantidade,
+                total: (quantidade * itemParaAdicionar.price).toFixed(2)
+            });
+    
+            // Atualiza carrinho
+            carrinhoDeCompras.salvarCarrinho();
+            carrinhoDeCompras.carregarCarrinho();
+            loja.metodos.atualizarBadge(carrinhoDeCompras.calcularTotalQuantidade());
+    
+            // Exibe mensagem de sucesso
+            loja.metodos.mensagem('Item adicionado ao carrinho', 'green');
+        });
+    },
+    
 
     atualizarBadge:(value) =>{
         var badgeSpan = document.getElementById('badgeCart');
