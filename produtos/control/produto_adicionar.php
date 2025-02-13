@@ -96,16 +96,47 @@
                         <input type="text" class="form-control" name="marca" id="marca" maxlength="100">
                         <label for="marca" id="marca_error" class="error" style="display: none;">Não pode estar vazia</label>
                     </div>
-                    <div class="col-lg-6">
+                    <!-- <div class="col-lg-6">
                         <label for="categoria">Categoria: <span style="color: red;">*</span></label>
                         <input type="text" class="form-control" name="categoria" id="categoria" maxlength="100">
                         <label for="categoria" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
+                    </div> -->
+                    <div class="col-lg-6">
+                        <label for="categoria">Categoria: <span style="color: red;">*</span></label>
+                        <select class="form-control m-b" name="categoria" id="categoria">
+                            <option aria-disabled="true" value="">Selecione a categoria</option>
+                            <option value="ACESSORIO PARA PASSAROS">ACESSORIO PARA PASSAROS</option>
+                            <option value="ACESSORIO PARA ROEDORES">ACESSORIO PARA ROEDORES</option>
+                            <option value="ACESSORIO PARA GATOS">ACESSORIO PARA GATOS</option>
+                            <option value="ACESSORIO PARA CAES">ACESSORIO PARA CAES</option>
+                            <option value="ALIMENTO PARA PASSAROS">ALIMENTO PARA PASSAROS</option>
+                            <option value="ALIMENTO PARA ROEDORES">ALIMENTO PARA ROEDORES</option>
+                            <option value="SUPLEMENTO PARA PASSAROS">SUPLEMENTO PARA PASSAROS</option>
+                            <option value="PETISCOS PARA CAES">PETISCOS PARA CAES</option>
+                            <option value="PETISCOS PARA ROEDORES">PETISCOS PARA ROEDORES</option>
+                            <option value="HIGIENE PARA GATOS">HIGIENE PARA GATOS</option>
+                            <option value="HIGIENE PARA ROEDORES">HIGIENE PARA ROEDORES</option>
+                        </select>
+                        <label for="categoria" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="img">Imagem: <span style="color: red;">*</span></label>
+                        <input type="file" class="form-control" name="img" accept="img/*" id="img" maxlength="100">
+                        <label for="img" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
                     </div>
                     <div class="col-lg-6">
                         <label for="sub_categoria">Sub Categoria: <span style="color: red;">*</span></label>
                         <input type="text" class="form-control" name="sub_categoria" id="sub_categoria" maxlength="100">
                         <label for="sub_categoria" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
                     </div>
+                    
+                    <!-- <div class="col-lg-6">
+                        <label for="img">Imagem: <span style="color: red;">*</span></label>
+                        <input type="file" name="img" accept="img/*" id="img">
+                        
+                        <label for="sub_categoria" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
+                        <input type="hidden" name="img" id="img">
+                    </div> -->
                 </div>
             </div>
             <div class="row" style="margin-top: 25px;">
@@ -125,15 +156,18 @@
 
 <script>
     function salvar_produto(insert_data = {}) {
+        document.getElementById("salvar_produto_action").disabled = false;
+
         let exec = 0;
-        document.getElementById("salvar_produto_action").disabled = true;
 
         var name = document.getElementById('name').value;
         var price = document.getElementById('price').value;
         var marca = document.getElementById('marca').value;
         var categoria = document.getElementById('categoria').value;
         var sub_categoria = document.getElementById('sub_categoria').value;
-        
+        var imgInput = document.getElementById('img');
+        var imgFile = imgInput.files[0]; // Obtém o arquivo selecionado
+
         // Validação dos campos
         if (name.trim()) {
             exec++;
@@ -191,36 +225,30 @@
         }
 
         if (exec === 5) {
-            let verifica_produto_dados = {
-                name: name.trim(),
-                price: price,
-                marca: marca.trim(),
-                categoria: categoria.trim(),
-                sub_categoria: sub_categoria.trim()
-            };
+            if (!imgFile) {
+                document.getElementById("img").style.border = "1px solid red";
+                document.getElementById("img_error").style.display = "block";
+                setTimeout(() => {
+                    document.getElementById("img").style.border = "1px solid #e5e6e7";
+                    document.getElementById("img_error").style.display = "none";
+                }, 2300);
+                document.getElementById("salvar_produto_action").disabled = false;
+                return;
+            }
 
-            fetch('../../produtos/control/produto_verifica_existe.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(verifica_produto_dados),
+            // Enviar imagem para o servidor
+            const formData = new FormData();
+            formData.append("img", imgFile);
+
+            fetch("../../produtos/control/upload.php", {
+                method: "POST",
+                body: formData,
             })
-            .then((response) => response.text())
-            .then((verifica) => {
-                if (verifica.trim() == "400") {
-                    expand_dados_gerais_produto();
-                    document.getElementById("name").value = "";
-                    document.getElementById("price").value = "";
-                    document.getElementById("marca").value = "";
-                    document.getElementById("categoria").value = "";
-                    document.getElementById("sub_categoria").value = "";
-                    mostrar_mensagem_center_modal('Produto já cadastrado');
-                    setTimeout(() => {
-                        document.getElementById("salvar_produto_action").disabled = false;
-                    }, 5);
-                } else if (verifica.trim() == "200") {
-                    insert_data = {
+            .then(response => response.json())
+            .then(data => {
+                if (data.imgUrl) {
+                    let imgUrl = data.imgUrl; // URL da imagem salva
+                    let verifica_produto_dados = {
                         name: name.trim(),
                         price: price,
                         marca: marca.trim(),
@@ -229,18 +257,20 @@
                     };
                     insert_produto(insert_data);
                 } else {
-                    fechar_window();
-                    mostrar_mensagem('Houve um erro (Tente novamente)');
+                    console.error("Erro no upload da imagem:", data.error);
+                    document.getElementById("salvar_produto_action").disabled = false;
                 }
             })
-            .catch((error) => {
-                console.error(error);
+            .catch(error => {
+                console.error("Erro ao enviar a imagem:", error);
+                document.getElementById("salvar_produto_action").disabled = true;
             });
         } else {
             expand_dados_gerais_produto();
             document.getElementById("salvar_produto_action").disabled = false;
         }
     }
+
 
 
     function insert_produto(content = {}) {

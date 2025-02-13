@@ -1,4 +1,9 @@
-<?php ?>
+<?php
+require_once("../parametro/configDB/connectDB.php");
+$PDO = connectDB::getInstance();
+  $sql = "SELECT * FROM produtos ORDER BY Id ASC";
+  $stm = $PDO->prepare($sql);
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -70,7 +75,7 @@
                               </span>
                           </a>
                           <!-- Botão Carrinho -->
-                          <form style="display: flex !important;" action="carrinho.html">
+                          <form style="display: flex !important;" action="carrinho.php">
                           <button type="submit" class="btn position-relative custom-button m-2">
                               <span class="d-none d-lg-inline">Carrinho</span> <!-- Oculta o texto em dispositivos móveis -->
                               <i class="bi-cart-fill me-1"></i>
@@ -416,8 +421,45 @@
         <section class="py-5">
             <div class="container px-4 px-lg-5 mt-5">
                 <div id="itensProdutos" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                    
-                    
+                <?php
+                  while ($produt_data = $stm->fetch(PDO::FETCH_ASSOC)) {
+                      echo "<div class=\"col-12 mb-5\">
+                              <div class=\"card h-100\">
+                                  <!-- Product image -->
+                                  <div class=\"card-cont\">
+                                      <img class=\"card-img-top\" src=\"" . $produt_data['Img'] . "\" alt=\"...\" />
+                                  </div>
+
+                                  <!-- Product details -->
+                                  <div class=\"card-body p-4\">
+                                      <div class=\"text-center\">
+                                          <!-- Product name -->
+                                          <h5 class=\"fw-bolder\">" . $produt_data['Name'] . "</h5>
+                                          <!-- Product price -->
+                                          <span class=\"price\">
+                                              <span class=\"currency\">R$</span>
+                                              <span class=\"value\">" . $produt_data['Price'] . "</span>
+                                          </span>
+                                      </div>
+                                  </div>
+
+                                  <!-- Product actions -->
+                                  <div class=\"card-footer p-4 pt-0 border-top-0 bg-transparent\">
+                                      <div class=\"text-center\">
+                                          <a class=\"custom-button mt-auto\" href=\"item.php\" onclick=\"loja.metodos.verPaginaDoItem([
+                                              '" . $produt_data['Img'] . "',
+                                              '" . $produt_data['Name'] . "',
+                                              '" . $produt_data['Id'] . "',
+                                              '" . $produt_data['Price'] . "',
+                                              '" . $produt_data['Marca'] . "'
+                                          ])\">Comprar</a>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>";
+                  }
+                  ?>
+                
                 </div>
             </div>
 
@@ -435,10 +477,10 @@
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
-        <script type="text/javascript" src="js/jquery-3.7.1.js"></script>
-        <script type="text/javascript" src="js/dados.js?v=2.3"></script>
-        <script type="text/javascript" src="js/carrinho.js"></script>
-        <script type="text/javascript" src="js/app.js?v=2.3"></script>
+        <script type="text/javascript" src="http://localhost/camposdb/public/js/jquery-3.7.1.js"></script>
+        <script type="text/javascript" src="http://localhost/camposdb/public/js/dados.js"></script>
+        <script type="text/javascript" src="http://localhost/camposdb/public/js/carrinho.js"></script>
+        <script type="text/javascript" src="http://localhost/camposdb/public/js/app.js"></script>
         
         <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5RXN6MPS"

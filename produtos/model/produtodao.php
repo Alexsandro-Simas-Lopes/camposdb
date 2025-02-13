@@ -284,23 +284,6 @@ class produtodao
         }
     }
 
-    public static function busca_produto_cliente_assinatura($id_cliente)
-    {
-        $return_data = array();
-        if (!empty($id_cliente)) {
-            $busca_produto_cliente = self::busca_produto_cliente($id_cliente);
-            if (!empty($busca_produto_cliente)) {
-                if (isset($busca_produto_cliente['error_code'])) {
-                    $return_data = $busca_produto_cliente;
-                } else {
-                    $return_data = array();
-                    foreach ($busca_produto_cliente as $produto_cliente) {
-                    }
-                }
-            }
-        }
-        return $return_data;
-    }
 
 
     // public static function busca_produto_cliente($id_cliente)
