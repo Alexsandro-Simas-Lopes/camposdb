@@ -250,7 +250,7 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                document.getElementById('name_ordericon').click();
+                document.getElementById('caminho_ordericon').click();
             });
 
             $(document).on('click', '.collapse-link', function() {

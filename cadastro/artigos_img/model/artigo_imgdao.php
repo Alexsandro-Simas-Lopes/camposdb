@@ -1,6 +1,6 @@
 <?php
-require_once("../../parametro/configDB/connectDB.php");
-require_once("../../../cadastro/imagens_artigos/model/artigo_images.php");
+require_once("../../../parametro/configDB/connectDB.php");
+require_once("../../../cadastro/artigos_img/model/artigos_img.php");
 //and Marca = :Marca and Name = :Name and Img = :Img and Categoria = :Categoria and Sub_Categoria = :Sub_Categoria and Price = :Price
 class artigo_imgdao
 {

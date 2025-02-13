@@ -1,5 +1,5 @@
 <?php
-require_once("../../artigos_img/model/artigos_imgdao.php");
+require_once("../../artigos_img/model/artigo_imgdao.php");
 
 class artigo_img_listar
 {
