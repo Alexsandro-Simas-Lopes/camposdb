@@ -89,23 +89,23 @@ function editar(id) {
         });
 }
 
-function editarImg(id) {
-    fetch('../../produtos/control/produto_editar_img.php', {
-        method: 'POST',
-        body: JSON.stringify({
-            id: id
-        })
-    })
-        .then((response) => response.text())
-        .then((html) => {
-            $('#modal_window').find('.modal-content').html('');
-            $('#modal_window').find('.modal-content').html(html);
-            $('#modal_window').modal('show');
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-}
+// function editarImg(id) {
+//     fetch('../../produtos/control/produto_editar_img.php', {
+//         method: 'POST',
+//         body: JSON.stringify({
+//             id: id
+//         })
+//     })
+//         .then((response) => response.text())
+//         .then((html) => {
+//             $('#modal_window').find('.modal-content').html('');
+//             $('#modal_window').find('.modal-content').html(html);
+//             $('#modal_window').modal('show');
+//         })
+//         .catch((error) => {
+//             console.error(error);
+//         });
+// }
 
 function fechar() {
     $('#modal').modal('hide');
@@ -161,10 +161,6 @@ function listarproduto(filtro = {}) {
                     if (item.id) {
                         console.log(item.id);
                         edit = `<button onclick="editar('${item.id}')" class="btn btn-primary dim" type="button"><i class="fa fa-pencil" data-placement="bottom" style="cursor:pointer; padding: 2px"  title="Alterar"></i></button>`;
-                    }
-                    if (item.id) {
-                        console.log(item.id);
-                        editImg = `<button onclick="editarImg('${item.id}')" class="btn btn-warning dim" type="button"><i class="fa fa-camera" data-placement="bottom" style="cursor:pointer; padding: 2px"  title="Alterar"></i></button>`;
                     }
                     if (item.id) {
                         remover = `<button onclick="excluir('${item.id}','${item.name ?? ""}')" class="btn btn-danger dim" type="button"><i class="fa fa-trash" data-placement="bottom" style="cursor:pointer; padding: 2px"  title="Excluir"></i></button>`;

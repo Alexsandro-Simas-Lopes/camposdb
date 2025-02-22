@@ -29,9 +29,6 @@ class produto_editar
                 $price_limpo = preg_replace('/[^\x20-\x7E]/', '', $received['price']);
                 $price_limpo = str_replace(array("'", '"', '`', '/'), '', $price_limpo);
 
-                // Atualizar imagem se um novo arquivo foi enviado
-                $imagemAntiga = $produto->getImg();
-                $novaImagem = isset($_FILES['img']) ? uploadImagem($_FILES['img'], $imagemAntiga) : $imagemAntiga;
 
                 // Atualiza os dados do produto
                 $produto->setMarca($marca_limpo);

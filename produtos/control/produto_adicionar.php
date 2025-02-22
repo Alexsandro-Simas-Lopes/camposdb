@@ -96,26 +96,15 @@
                         <input type="text" class="form-control" name="marca" id="marca" maxlength="100">
                         <label for="marca" id="marca_error" class="error" style="display: none;">Não pode estar vazia</label>
                     </div>
-                    <!-- <div class="col-lg-6">
-                        <label for="categoria">Categoria: <span style="color: red;">*</span></label>
-                        <input type="text" class="form-control" name="categoria" id="categoria" maxlength="100">
-                        <label for="categoria" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
-                    </div> -->
                     <div class="col-lg-6">
                         <label for="categoria">Categoria: <span style="color: red;">*</span></label>
                         <select class="form-control m-b" name="categoria" id="categoria">
                             <option aria-disabled="true" value="">Selecione a categoria</option>
-                            <option value="ACESSORIO PARA PASSAROS">ACESSORIO PARA PASSAROS</option>
-                            <option value="ACESSORIO PARA ROEDORES">ACESSORIO PARA ROEDORES</option>
-                            <option value="ACESSORIO PARA GATOS">ACESSORIO PARA GATOS</option>
-                            <option value="ACESSORIO PARA CAES">ACESSORIO PARA CAES</option>
-                            <option value="ALIMENTO PARA PASSAROS">ALIMENTO PARA PASSAROS</option>
-                            <option value="ALIMENTO PARA ROEDORES">ALIMENTO PARA ROEDORES</option>
-                            <option value="SUPLEMENTO PARA PASSAROS">SUPLEMENTO PARA PASSAROS</option>
-                            <option value="PETISCOS PARA CAES">PETISCOS PARA CAES</option>
-                            <option value="PETISCOS PARA ROEDORES">PETISCOS PARA ROEDORES</option>
-                            <option value="HIGIENE PARA GATOS">HIGIENE PARA GATOS</option>
-                            <option value="HIGIENE PARA ROEDORES">HIGIENE PARA ROEDORES</option>
+                            <option value="PASSAROS">PASSAROS</option>
+                            <option value="ROEDORES">ROEDORES</option>
+                            <option value="GATOS">GATOS</option>
+                            <option value="CAES">CAES</option>
+                            <option value="PEIXES">PEIXES</option>
                         </select>
                         <label for="categoria" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
                     </div>
@@ -129,14 +118,6 @@
                         <input type="text" class="form-control" name="sub_categoria" id="sub_categoria" maxlength="100">
                         <label for="sub_categoria" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
                     </div>
-                    
-                    <!-- <div class="col-lg-6">
-                        <label for="img">Imagem: <span style="color: red;">*</span></label>
-                        <input type="file" name="img" accept="img/*" id="img">
-                        
-                        <label for="sub_categoria" id="categoria_error" class="error" style="display: none;">Não pode estar vazia</label>
-                        <input type="hidden" name="img" id="img">
-                    </div> -->
                 </div>
             </div>
             <div class="row" style="margin-top: 25px;">
@@ -225,6 +206,7 @@
         }
 
         if (exec === 5) {
+
             if (!imgFile) {
                 document.getElementById("img").style.border = "1px solid red";
                 document.getElementById("img_error").style.display = "block";
@@ -234,12 +216,11 @@
                 }, 2300);
                 document.getElementById("salvar_produto_action").disabled = false;
                 return;
-            }
-
+            } 
             // Enviar imagem para o servidor
             const formData = new FormData();
             formData.append("img", imgFile);
-
+            
             fetch("../../produtos/control/upload.php", {
                 method: "POST",
                 body: formData,
@@ -248,14 +229,23 @@
             .then(data => {
                 if (data.imgUrl) {
                     let imgUrl = data.imgUrl; // URL da imagem salva
-                    let verifica_produto_dados = {
+                    // Preparar os dados do produto com a URL da imagem
+                    let produto_dados = {
                         name: name.trim(),
                         price: price,
                         marca: marca.trim(),
                         categoria: categoria.trim(),
                         sub_categoria: sub_categoria.trim(),
+                        img: imgUrl,
                     };
-                    insert_produto(insert_data);
+                    
+                    // Mesclar com quaisquer dados adicionais, se fornecidos
+                    if (Object.keys(insert_data).length > 0) {
+                        produto_dados = {...produto_dados, ...insert_data};
+                    }
+                    
+                    console.log("Dados a salvar no banco >>>", produto_dados);
+                    insert_produto(produto_dados);
                 } else {
                     console.error("Erro no upload da imagem:", data.error);
                     document.getElementById("salvar_produto_action").disabled = false;
@@ -263,7 +253,7 @@
             })
             .catch(error => {
                 console.error("Erro ao enviar a imagem:", error);
-                document.getElementById("salvar_produto_action").disabled = true;
+                document.getElementById("salvar_produto_action").disabled = false;
             });
         } else {
             expand_dados_gerais_produto();
@@ -314,27 +304,29 @@
         }
     }
 
-    // function fechar_modal() {
-    //     $('#modal').modal('hide');
-    //     if ($('#modal_window').hasClass('in')) {
-    //         setTimeout(() => {
-    //             $('body').addClass('modal-open').css('padding-right', '14px');
-    //         }, 15);
-    //     } else {
-    //         $('body').css('padding-right', '0').removeClass('modal-open');
-    //     }
-    // }
-
-    // function expand_dados_gerais_produto() {
-    //     let verifica_expand_dados_gerais = document.getElementById("expand_section1")
-    //     let verifica_expand_identificacao = document.getElementById("expand_section2")
-    //     let verifica_expand_parametro = document.getElementById("expand_section3")
-
-    //     if (verifica_expand_dados_gerais.className.includes('fa-chevron-down')) {
-    //         verifica_expand_dados_gerais.classList.remove('fa-chevron-down')
-    //         verifica_expand_dados_gerais.classList.remove('fa-chevron-up')
-    //         verifica_expand_dados_gerais.classList.add('fa-chevron-up')
-    //         document.getElementById("dados_gerais_container").style.display = 'block'
-    //     }
-    // }
+    
 </script>
+<!-- function fechar_modal() {
+        $('#modal').modal('hide');
+        if ($('#modal_window').hasClass('in')) {
+            setTimeout(() => {
+                $('body').addClass('modal-open').css('padding-right', '14px');
+            }, 15);
+        } else {
+            $('body').css('padding-right', '0').removeClass('modal-open');
+        }
+    }
+
+    function expand_dados_gerais_produto() {
+        let verifica_expand_dados_gerais = document.getElementById("expand_section1")
+        let verifica_expand_identificacao = document.getElementById("expand_section2")
+        let verifica_expand_parametro = document.getElementById("expand_section3")
+
+        if (verifica_expand_dados_gerais.className.includes('fa-chevron-down')) {
+            verifica_expand_dados_gerais.classList.remove('fa-chevron-down')
+            verifica_expand_dados_gerais.classList.remove('fa-chevron-up')
+            verifica_expand_dados_gerais.classList.add('fa-chevron-up')
+            document.getElementById("dados_gerais_container").style.display = 'block'
+        }
+    } 
+-->

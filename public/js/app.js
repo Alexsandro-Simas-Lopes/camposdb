@@ -86,11 +86,12 @@ loja.metodos = {
             }
         }
         
-        if (MENU) {
+        if (!MENU) {
+            console.error('Falha ao carregar o JSON de todas as URLs.');
+        } else {
+            
             loja.itemExibidosNoMenu = MENU;
             loja.metodos.obterItensLoja();
-        } else {
-            console.error('Falha ao carregar o JSON de todas as URLs.');
         }
     },
 
@@ -145,27 +146,27 @@ loja.metodos = {
         var categorias = []
         switch (value) {
             case 1:
-                categorias = ['ACESSORIO PARA PASSAROS', 'ALIMENTO PARA PASSAROS', 'SUPLEMENTO PARA PASSAROS'];
+                categorias = ['PASSAROS'];
               break;
 
             case 2:
-                categorias =['PETISCOS PARA CAES', 'ACESSORIO PARA CAES'];
+                categorias =['CAES'];
               break;
 
             case 3:
-                categorias = ['HIGIENE PARA GATOS', 'ACESSORIO PARA GATOS'];
+                categorias = ['GATOS'];
             break;
 
             case 4:
-                categorias = ['ACESSORIO PARA PASSAROS', 'ACESSORIO PARA GATOS', 'ACESSORIO PARA CAES', 'ACESSORIO PARA ROEDORES'];
+                categorias = ['ROEDORES'];
             break;
 
             case 5:
-                categorias = ['HIGIENE PARA ROEDORES', 'HIGIENE PARA GATOS', 'ACESSORIO PARA ROEDORES', 'ALIMENTO PARA ROEDORES', 'PETISCOS PARA ROEDORES'];
+                categorias = ['PEIXES'];
             break;
 
             default:
-          }
+        }
 
         dadosFiltrados = MENU.filter(item => categorias.includes(item.categoria));
 
@@ -542,31 +543,36 @@ document.querySelector(".dropdown-btn").addEventListener("click", function() {
     dropdownMenu.classList.remove("show");
 
     var categoriasSelecionadas = getCategoriasSelecionadas(); // Obtém as categorias e suas subcategorias selecionadas
-
     console.log("Categorias selecionadas:", categoriasSelecionadas);
 
     var itensFiltrados = filtrarBaseDeDados(categoriasSelecionadas); // Filtra a base de dados com base nas subcategorias selecionadas
-    console.log("itens filtrados", itensFiltrados);
     
-    if(itensFiltrados.length == 0){
+    
+    if(!itensFiltrados){
         loja.metodos.feedBackBuscaFalha();
     }else{
-        itemExibidosNoMenu = itensFiltrados;
+        console.log("itens filtrados", itensFiltrados);
+        loja.itemExibidosNoMenu = filtrarBaseDeDados(categoriasSelecionadas);
         loja.metodos.obterItensLoja(true);
     }
 });
 
 // Função para filtrar a base de dados com base nas categorias e subcategorias selecionadas
 function filtrarBaseDeDados(categoriasSelecionadas) {
+    if (!categoriasSelecionadas || Object.keys(categoriasSelecionadas).length === 0) {
+        console.warn("Categorias Selecionadas está vazio ou não definido.");
+        return [];
+    }
+
     var filteredData = [];
 
     MENU.forEach(function(item) {
         // Verifica se a categoria do item está presente nos itens selecionados
         var categoria = removerAcentos(item.categoria);
         if (categoriasSelecionadas[categoria]) {
-            // Verifica se alguma das subcategorias do item está presente nas subcategorias selecionadas da categoria
             var subcategorias = categoriasSelecionadas[categoria];
             var subcategoriasItem = removerAcentos(item.sub_categoria);
+            
             if (subcategorias.includes(subcategoriasItem)) {
                 filteredData.push(item); // Adiciona o item filtrado ao array
             }

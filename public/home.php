@@ -102,12 +102,13 @@ $PDO = connectDB::getInstance();
         <nav class="navbar-custom-top-header" id="filtro">
           <div class="navbar-left-custom-top-header">
             <ul class="nav-links-custom-top-header">
-              <li><a href="#filter"  onclick="loja.metodos.obterItensPorTag(1)">Pássaro</a></li>
-              <li><a href="#filter"  onclick="loja.metodos.obterItensPorTag(2)">Cães</a></li>
-              <li><a href="#filter"  onclick="loja.metodos.obterItensPorTag(3)">Gatos</a></li>
-              <li class="d-none d-lg-inline"><a href="#filter" onclick="loja.metodos.obterItensPorTag(4)">Acessório</a></li>
-              <li class="d-none d-lg-inline"><a href="#filter" onclick="loja.metodos.obterItensPorTag(5)">Roedores</a></li>
-              <li><a href="#filter" id="ver_mais_link">Ver mais</a></li>
+              <li><a href="#"  onclick="loja.metodos.obterItensPorTag(1)">Pássaros</a></li>
+              <li><a href="#"  onclick="loja.metodos.obterItensPorTag(2)">Cães</a></li>
+              <li><a href="#"  onclick="loja.metodos.obterItensPorTag(3)">Gatos</a></li>
+              <li class="d-none d-lg-inline"><a href="#" onclick="loja.metodos.obterItensPorTag(4)">Roedores</a></li>
+              <li class="d-none d-lg-inline"><a href="#" onclick="loja.metodos.obterItensPorTag(5)">Peixes</a></li>
+              <li><a href="#" id="ver_mais_link">Ver mais</a></li> <!-- ESTÁ COM DEFEITO! -->
+              
             </ul>
           </div>
 
@@ -421,43 +422,44 @@ $PDO = connectDB::getInstance();
         <section class="py-5">
             <div class="container px-4 px-lg-5 mt-5">
                 <div id="itensProdutos" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <?php
-                  while ($produt_data = $stm->fetch(PDO::FETCH_ASSOC)) {
-                      echo "<div class=\"col-12 mb-5\">
-                              <div class=\"card h-100\">
-                                  <!-- Product image -->
-                                  <div class=\"card-cont\">
-                                      <img class=\"card-img-top\" src=\"" . $produt_data['Img'] . "\" alt=\"...\" />
-                                  </div>
+                  <?php
+                    while ($produt_data = $stm->fetch(PDO::FETCH_ASSOC)) {
+                      echo "
+                      <div class=\"col-12 mb-5\">
+                          <div class=\"card h-100\">
+                              <!-- Product image -->
+                              <div class=\"card-cont\">
+                                  <img class=\"card-img-top\" src=\"" . $produt_data['Img'] . "\" alt=\"...\" />
+                              </div>
 
-                                  <!-- Product details -->
-                                  <div class=\"card-body p-4\">
-                                      <div class=\"text-center\">
-                                          <!-- Product name -->
-                                          <h5 class=\"fw-bolder\">" . $produt_data['Name'] . "</h5>
-                                          <!-- Product price -->
-                                          <span class=\"price\">
-                                              <span class=\"currency\">R$</span>
-                                              <span class=\"value\">" . $produt_data['Price'] . "</span>
-                                          </span>
-                                      </div>
-                                  </div>
-
-                                  <!-- Product actions -->
-                                  <div class=\"card-footer p-4 pt-0 border-top-0 bg-transparent\">
-                                      <div class=\"text-center\">
-                                          <a class=\"custom-button mt-auto\" href=\"item.php\" onclick=\"loja.metodos.verPaginaDoItem([
-                                              '" . $produt_data['Img'] . "',
-                                              '" . $produt_data['Name'] . "',
-                                              '" . $produt_data['Id'] . "',
-                                              '" . $produt_data['Price'] . "',
-                                              '" . $produt_data['Marca'] . "'
-                                          ])\">Comprar</a>
-                                      </div>
+                              <!-- Product details -->
+                              <div class=\"card-body p-4\">
+                                  <div class=\"text-center\">
+                                      <!-- Product name -->
+                                      <h5 class=\"fw-bolder\">" . $produt_data['Name'] . "</h5>
+                                      <!-- Product price -->
+                                      <span class=\"price\">
+                                          <span class=\"currency\">R$</span>
+                                          <span class=\"value\">" . $produt_data['Price'] . "</span>
+                                      </span>
                                   </div>
                               </div>
-                          </div>";
-                  }
+
+                              <!-- Product actions -->
+                              <div class=\"card-footer p-4 pt-0 border-top-0 bg-transparent\">
+                                  <div class=\"text-center\">
+                                      <a class=\"custom-button mt-auto\" href=\"item.php\" onclick=\"loja.metodos.verPaginaDoItem([
+                                          '" . $produt_data['Img'] . "',
+                                          '" . $produt_data['Name'] . "',
+                                          '" . $produt_data['Id'] . "',
+                                          '" . $produt_data['Price'] . "',
+                                          '" . $produt_data['Marca'] . "'
+                                      ])\">Comprar</a>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>";
+                    }
                   ?>
                 
                 </div>
@@ -477,10 +479,10 @@ $PDO = connectDB::getInstance();
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
-        <script type="text/javascript" src="http://localhost/camposdb/public/js/jquery-3.7.1.js"></script>
-        <script type="text/javascript" src="http://localhost/camposdb/public/js/dados.js"></script>
-        <script type="text/javascript" src="http://localhost/camposdb/public/js/carrinho.js"></script>
-        <script type="text/javascript" src="http://localhost/camposdb/public/js/app.js"></script>
+        <script type="text/javascript" src="../public/js/jquery-3.7.1.js"></script>
+        <script type="text/javascript" src="../public/js/dados.js"></script>
+        <script type="text/javascript" src="../public/js/carrinho.js"></script>
+        <script type="text/javascript" src="../public/js/app.js"></script>
         
         <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5RXN6MPS"
