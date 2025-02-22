@@ -6,7 +6,7 @@ class connectDB {
         static $instance;
         if (!isset($instance)) {
             $host = 'localhost';
-            $dbname = 'camposdb'; // Nome correto do banco de dados
+            $dbname = 'scientific_articles'; // Nome correto do banco de dados
             $user = 'root';       // Nome do usuário correto
             $senha = '2025';      // Senha correta
             $porta = '3306';      // Porta do MySQL
