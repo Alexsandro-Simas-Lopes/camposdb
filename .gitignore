@@ -23,6 +23,8 @@ uploads/
 target/
 dist/
 
+parametro/configDG/*
+
 # JetBrains IDE
 .idea/
 
